@@ -7,6 +7,6 @@
     </div>
     <div class="p-6 pt-0">
         <div class="text-2xl font-bold {{ $color }}">R$ {{ $value }}</div>
-        <p class="text-xs text-gray-500">{{ $description }}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-300">{{ $description }}</p>
     </div>
 </div>
