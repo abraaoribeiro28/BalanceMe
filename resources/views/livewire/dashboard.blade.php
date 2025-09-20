@@ -19,7 +19,7 @@
 
     <div class="space-y-4 overflow-x-hidden">
         <div class="inline-flex items-center rounded-md bg-[#f4f4f5] dark:bg-white/10 p-2 max-w-full overflow-x-auto">
-            @php $tab = 'overview' @endphp
+            @php $tab = 'cards' @endphp
             <x-ui.button size="sm" variant="{{ $tab === 'overview' ? 'primary' : 'ghost' }}">Visão Geral</x-ui.button>
             <x-ui.button size="sm" variant="{{ $tab === 'transactions' ? 'primary' : 'ghost' }}">Transações</x-ui.button>
             <x-ui.button size="sm" variant="{{ $tab === 'categories' ? 'primary' : 'ghost' }}">Categorias</x-ui.button>
@@ -31,6 +31,8 @@
                 @include('partials.overview')
             @elseif($tab === 'transactions')
                 @include('partials.transactions')
+            @elseif($tab === 'cards')
+                @include('partials.cards')
             @endif
         </div>
     </div>
