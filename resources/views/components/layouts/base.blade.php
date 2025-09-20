@@ -12,7 +12,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
+
         <style>
             /* gives the progress bar primary color */
             :root {
@@ -40,8 +40,8 @@
             loadDarkMode();
         });
     </script>
-    
-    <body class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+
+    <body class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
 
         {{ $slot }}
 
