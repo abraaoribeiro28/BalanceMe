@@ -39,10 +39,12 @@
         <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
             @guest
                 <div class="space-x-4">
-                    <a href="{{ route('login') }}"
-                       class="text-sm font-semibold leading-6 text-neutral-900 dark:text-neutral-200">Login</a>
-                    <a href="{{ route('register') }}"
-                       class="rounded-md border border-neutral-300/40 bg-neutral-50 px-3 py-1 text-sm font-semibold text-neutral-900 dark:border-white/20 dark:bg-white/5 dark:text-white">Register</a>
+                    <a href="{{ route('login') }}" class="text-sm font-semibold leading-6 text-neutral-900 dark:text-neutral-200">
+                        Entrar
+                    </a>
+                    <a href="{{ route('register') }}" class="rounded-md border border-neutral-300/40 bg-neutral-50 px-3 py-1 text-sm font-semibold text-neutral-900 dark:border-white/20 dark:bg-white/5 dark:text-white">
+                        Registre-se
+                    </a>
                 </div>
             @endguest
 
@@ -66,7 +68,7 @@
          x-cloak=""
          aria-modal="true">
         <div class="fixed inset-0 z-50 bg-background"></div>
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
+        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
              x-on:click.away="open = false">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
@@ -95,10 +97,31 @@
                     <div class="py-6">
                         @guest
                             <a href="{{ route('login') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Login</a>
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Entrar</a>
                             <a href="{{ route('register') }}"
-                               class="mt-2 block rounded-md border ring-1 ring-base-200/10 bg-base-200/20 px-3 py-2.5 text-base font-semibold text-base-100">Register</a>
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Registre-se</a>
+                        @else
+                            <a href="{{ route('dashboard') }}"
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
+                                Dashboard
+                            </a>
+                            <a href="{{ route('settings.account') }}"
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
+                                Minha conta
+                            </a>
+                            <form
+                                action="{{ route('app.auth.logout') }}"
+                                method="post"
+                                class="contents"
+                            >
+                                @csrf
+                                <button type="submit"
+                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
+                                    Sair
+                                </button>
+                            </form>
                         @endguest
+
                     </div>
                 </div>
             </div>

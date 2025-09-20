@@ -31,7 +31,7 @@
 
 
         <div
-            class="flex lg:hidden gap-4 items-center"
+            class="hidden gap-4 items-center"
         >
             <button
                 type="button"
@@ -55,7 +55,7 @@
             </button>
         </div>
 
-        <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
+        <div class="flex items-center justify-end">
             @auth
                 <x-user-dropdown/>
             @endauth
