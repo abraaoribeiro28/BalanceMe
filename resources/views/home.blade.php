@@ -1,112 +1,91 @@
-<div class="relative z-10 w-full">
-
-<!-- Top Border Pattern -->
-<div class="grid grid-cols-5">
-    <div class="border-neutral-600/30 border !border-l-0 !border-r-0 !border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to right, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to right, transparent 0%, black 80%, black 100%);">
-    </div>
-    <div class="border-neutral-600/30 bg-background z-40 col-span-3 border !border-t-0 border-dashed py-10 lg:py-20">
-    </div>
-    <div class="border-neutral-600/30 border !border-l-0 !border-r-0 !border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to left, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to left, transparent 0%, black 80%, black 100%);">
-    </div>
-</div>
-
-<!-- Main Title Section -->
-<div class="grid grid-cols-5">
-    <div class=" border-neutral-600/30 hidden border !border-l-0 !border-r-0 border-t-0 border-dashed py-6 lg:flex"
-        style="mask: linear-gradient(to right, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to right, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <!-- Title Content -->
-    <div
-        class=" border-neutral-600/30 before:border-neutral-600/30 before: relative col-span-5 border border-t-0 border-dashed py-10 before:absolute before:-left-16 before:-top-16 before:h-32 before:w-32 before:rounded-full before:border before:border-dashed before:content-[''] lg:col-span-3 dark:before:border-white/15">
-
-        <h1 class="text-base-100 mx-auto px-4 text-3xl font-bold tracking-tight text-center sm:text-5xl md:max-w-lg md:px-0">
-            Own Every Line of Your <br> Laravel UI
-        </h1>
-    </div>
-
-    <div class=" border-neutral-600/30 hidden border !border-l-0 !border-r-0 border-t-0 border-dashed py-6 lg:flex"
-        style="mask: linear-gradient(to left, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to left, transparent 0%, black 80%, black 100%);">
-    </div>
-</div>
-
-<!-- Subtitle Section -->
-<div class="grid grid-cols-5">
-    <div class=" border-neutral-600/30 hidden border !border-l-0 !border-r-0 border-t-0 border-dashed py-6 lg:flex"
-        style="mask: linear-gradient(to right, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to right, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <!-- Subtitle Content -->
-    <div
-        class=" border-neutral-600/30  relative col-span-5 border border-t-0 border-dashed py-10 before:absolute before:-right-10 before:-top-10 before:z-40 before:h-20 before:w-20 before:rotate-45 before:border before:border-dashed before:content-[''] lg:col-span-3 before:border-neutral-600/30 dark:before:border-white/15 before:bg-background">
-
-        <x-ui.text class="opacity-50 mx-auto max-w-2xl px-4 text-center sm:text-lg md:px-0">
-            Sheaf UI is a CLI-driven UI framework that scaffolds elegant Blade + Livewire components right into your codebase. It’s open source, production-ready, and fully yours.
-        </x-ui.text>
-    </div>
-
-    <div class=" border-neutral-600/30 hidden border !border-l-0 !border-r-0 border-t-0 border-dashed py-6 lg:flex"
-        style="mask: linear-gradient(to left, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to left, transparent 0%, black 80%, black 100%);">
-    </div>
-</div>
-
-<!-- Call-to-Action Section -->
-<div class="grid grid-cols-5">
-    <div class=" border-neutral-600/30 border !border-l-0 !border-r-0 border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to right, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to right, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <div
-        class=" border-neutral-600/30 hidden border border-r-0 border-t-0 border-dashed py-6 lg:flex">
-    </div>
-
-    <!-- CTA Button -->
-    <div
-        class="border-neutral-600/30 before:border-neutral-600/30 flex items-center justify-center relative col-span-3 border border-t-0 border-dashed py-6 before:absolute before:-bottom-5 before:-right-6 before:z-10 before:h-10 before:w-12 before:rounded-none before:border before:border-dashed before:content-[''] lg:col-span-1 dark:before:border-white/15 before:bg-background">
-
-        <!-- SVG avec animation carrée -->
-
-        <x-ui.button 
-            href="https://sheafui.dev/docs/guides/overview" 
-            iconAfter="arrow-up-right"
-            target="_blank"
-        >
-            Get started
-        </x-ui.button>
-    </div>
-
-    <div
-        class=" border-neutral-600/30 hidden border border-l-0 border-t-0 border-dashed py-6 lg:flex">
-    </div>
-
-    <div class=" border-neutral-600/30 border !border-l-0 !border-r-0 border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to left, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to left, transparent 0%, black 80%, black 100%);">
-    </div>
-</div>
-
-<!-- Bottom Border Pattern -->
-<div class="grid grid-cols-5">
-    <div class=" border-neutral-600/30 border !border-b-0 !border-l-0 !border-r-0 border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to right, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to right, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <div class=" lg:py-15 border-neutral-600/30 hidden border !border-b-0 border-r-0 border-t-0 border-dashed py-6 md:flex"
-        style="mask: linear-gradient(to top, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <div class=" border-neutral-600/30 col-span-3 border !border-b-0 border-r-0 border-t-0 border-dashed md:col-span-1"
-        style="mask: linear-gradient(to top, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <div class=" border-neutral-600/30 hidden border !border-b-0 border-t-0 border-dashed md:flex"
-        style="mask: linear-gradient(to top, transparent 0%, black 80%, black 100%);">
-    </div>
-
-    <div class=" border-neutral-600/30 border !border-b-0 !border-l-0 !border-r-0 border-t-0 border-dashed py-6"
-        style="mask: linear-gradient(to left, transparent 0%, black 80%, black 100%); -webkit-mask: linear-gradient(to left, transparent 0%, black 80%, black 100%);">
-    </div>
-</div>
-
-</div>
+<main>
+    <section class="lg:min-h-screen w-full flex items-center">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 xl:py-0 pt-60 pb-40">
+            <div class="grid gap-6 lg:grid-cols-2 lg:gap-12">
+                <div class="flex flex-col justify-center space-y-4">
+                    <div class="space-y-2">
+                        <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl">
+                            Gerencie suas finanças com facilidade
+                        </h1>
+                        <p class="max-w-[600px] text-gray-500 dark:text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                            Controle suas receitas e despesas, visualize relatórios detalhados e tome decisões
+                            financeiras mais inteligentes.</p>
+                    </div>
+                    <div class="flex flex-col gap-2 min-[400px]:flex-row">
+                        <x-ui.button href="/register" icon-after="chevron-right">
+                            Começar agora
+                        </x-ui.button>
+                        <x-ui.button variant="outline" href="/login">
+                            Já tenho uma conta
+                        </x-ui.button>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center justify-center">
+                    <img alt="Dashboard Preview" class="rounded-lg object-cover" src="{{ asset('images/hero.svg') }}"></div>
+            </div>
+        </div>
+    </section>
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="flex flex-col items-center justify-center space-y-4 text-center">
+                <div class="space-y-2">
+                    <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Recursos principais</h2>
+                    <p
+                        class="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                        Tudo o que você precisa para gerenciar suas finanças pessoais ou do seu pequeno negócio.</p>
+                </div>
+            </div>
+            <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-3">
+                <div class="rounded-lg border border-zinc-300 dark:border-white/20 shadow-2xs" data-v0-t="card">
+                    <div class="space-y-1.5 p-6 flex flex-row items-center gap-4 pb-2"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-chart-pie h-8 w-8 text-emerald-500">
+                            <path
+                                d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z">
+                            </path>
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                        </svg>
+                        <h3 class="font-semibold tracking-tight text-xl">Dashboard Completo</h3>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Visualize seu saldo, receitas e despesas em
+                            um painel intuitivo com gráficos detalhados.</p>
+                    </div>
+                </div>
+                <div class="rounded-lg border border-zinc-300 dark:border-white/20 shadow-2xs" data-v0-t="card">
+                    <div class="space-y-1.5 p-6 flex flex-row items-center gap-4 pb-2"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-chart-line h-8 w-8 text-emerald-500">
+                            <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                            <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
+                        <h3 class="font-semibold tracking-tight text-xl">Gestão de Transações</h3>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Registre, edite e exclua transações
+                            facilmente. Categorize e acompanhe para onde vai seu dinheiro.</p>
+                    </div>
+                </div>
+                <div class="rounded-lg border border-zinc-300 dark:border-white/20 shadow-2xs" data-v0-t="card">
+                    <div class="space-y-1.5 p-6 flex flex-row items-center gap-4 pb-2"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-users h-8 w-8 text-emerald-500">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h3 class="font-semibold tracking-tight text-xl">Categorias Personalizáveis</h3>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Crie e personalize categorias para organizar
+                            suas finanças de acordo com suas necessidades.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

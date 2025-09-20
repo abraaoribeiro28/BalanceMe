@@ -5,7 +5,7 @@
 <x-layouts.base>
 
     <x-layouts.partials.header />
-    
+
     {{ $slot }}
 
     <x-layouts.partials.footer />
