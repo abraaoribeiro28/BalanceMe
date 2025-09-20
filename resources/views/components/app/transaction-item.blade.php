@@ -1,12 +1,12 @@
 @props(['label', 'category', 'date', 'type', 'value', 'card' => null])
 <div class="flex items-center">
-        <div @class([
+    <div @class([
                 'flex h-9 w-9 items-center justify-center rounded-full',
                 'bg-emerald-100' => $type === 'receita',
                 'bg-rose-100' => $type != 'receita',
             ])>
-            {{ $slot }}
-        </div>
+        {{ $slot }}
+    </div>
     <div class="flex sm:flex-row flex-col sm:justify-between sm:w-full sm:items-center ml-4">
         <div class="space-y-1">
             <p class="text-sm font-medium leading-none">{{ $label }}</p>
@@ -19,14 +19,22 @@
             </p>
         </div>
 
-    <div class="flex items-center gap-2">
-        <div @class([
+        <div class="flex items-center gap-2">
+            <div @class([
                 'font-medium',
                 'text-emerald-500' => $type === 'receita' ,
                 'text-rose-500' => $type != 'receita',
             ])>
-            {{ $type === 'receita' ? '+' : '-' }}R$ {{ $value }}
+                {{ $type === 'receita' ? '+' : '-' }}R$ {{ $value }}
+            </div>
+            <div class="flex gap-2 ml-2">
+                <x-ui.button size="xs" variant="soft" class="!p-0">
+                    <x-ui.icon variant="mini" name="pencil-square"/>
+                </x-ui.button>
+                <x-ui.button size="xs" variant="soft" class="!p-0">
+                    <x-ui.icon variant="mini" name="trash" class="!text-rose-500"/>
+                </x-ui.button>
+            </div>
         </div>
-    </div>
     </div>
 </div>
