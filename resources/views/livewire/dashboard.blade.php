@@ -35,7 +35,7 @@
             @elseif($tab === 'categories')
                 <livewire:categories/>
             @elseif($tab === 'cards')
-                @include('partials.cards')
+                <livewire:cards/>
             @endif
         </div>
     </div>

@@ -16,27 +16,22 @@ class CardSeeder extends Seeder
         DB::table('cards')->insert([
             [
                 'name' => 'Nubank',
-                'color' => '#9333ea', // roxo
                 'user_id' => 1,
             ],
             [
                 'name' => 'Inter',
-                'color' => '#f97316', // laranja
                 'user_id' => 1,
             ],
             [
                 'name' => 'Itaú',
-                'color' => '#1e3a8a', // azul escuro
                 'user_id' => 1,
             ],
             [
                 'name' => 'Bradesco',
-                'color' => '#ef4444', // vermelho
                 'user_id' => 1,
             ],
             [
                 'name' => 'Santander',
-                'color' => '#dc2626', // vermelho mais forte
                 'user_id' => 1,
             ],
         ]);

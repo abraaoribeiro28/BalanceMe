@@ -4,7 +4,6 @@
     <div class="flex flex-col space-y-1.5 p-6 pb-2">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full {{ $color }}"></div>
                 <h3 class="font-semibold tracking-tight text-lg">{{ $label }}</h3>
             </div>
             <div class="flex gap-1">
