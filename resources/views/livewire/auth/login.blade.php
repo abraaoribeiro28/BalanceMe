@@ -2,14 +2,14 @@
     Login to Sheaf
 </x-slot>
 
-<form 
+<form
     wire:submit="login"
-    class="mx-auto w-full max-w-md space-y-4"
+    class="mx-auto w-full max-w-md space-y-4 px-6"
 >
 
     <div class="space-y-4">
         <x-ui.field>
-            <x-ui.label>email address</x-ui.label>
+            <x-ui.label>E-mail</x-ui.label>
             <x-ui.input
                 wire:model="form.email"
             />
@@ -17,7 +17,7 @@
         </x-ui.field>
 
         <x-ui.field>
-            <x-ui.label>password</x-ui.label>
+            <x-ui.label>Senha</x-ui.label>
             <x-ui.input
                 wire:model="form.password"
                 type='password'
@@ -27,18 +27,18 @@
         </x-ui.field>
     </div>
 
-    <x-ui.button 
+    <x-ui.button
         class="w-full"
         type="submit"
     >
-        Log in
+        Entrar
     </x-ui.button>
 
     <x-ui.link
-        variant="soft" 
+        variant="soft"
         href="{{ route('register') }}"
     >
-        I dont have an account? 
-        <span class="underline">Sign up</span>
+        Não tenho uma conta?
+        <span class="underline">Registre-se</span>
     </x-ui.link>
 </form>

@@ -16,7 +16,7 @@
                     :attributes="$attributes->when(Request::routeIs('dashboard'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
                     variant="soft"
                 >
-                    dashboard
+                    Dashboard
                 </x-ui.link>
 
                 <x-ui.link
@@ -24,7 +24,7 @@
                     :attributes="$attributes->when(Request::routeIs('settings.account') , fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
                     variant="soft"
                 >
-                    account
+                    Conta
                 </x-ui.link>
             </div>
         </div>

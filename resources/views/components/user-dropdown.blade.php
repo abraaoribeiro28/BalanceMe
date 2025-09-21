@@ -7,13 +7,12 @@
         <x-ui.avatar
             class="cursor-pointer"
             :name="$user->name"
-            {{-- : name="$user->avatar" give avatar's image source if have any!  --}}
-            size="sm" 
+            size="sm"
         />
     </x-slot:button>
 
     <x-slot:menu class="w-56">
-        <x-ui.dropdown.group label="Signed in as">
+        <x-ui.dropdown.group label="Conectado como">
             <x-ui.dropdown.item>
                 {{ $user->email }}
             </x-ui.dropdown.item>
@@ -22,7 +21,7 @@
         <x-ui.dropdown.separator />
 
         <x-ui.dropdown.item :href="route('settings.account')" wire:navigate.live>
-            Account
+            Minha conta
         </x-ui.dropdown.item>
 
         <x-ui.dropdown.item :href="route('dashboard')" wire:navigate.live>
@@ -34,11 +33,11 @@
         <form
             action="{{ route('app.auth.logout') }}"
             method="post"
-            class="contents" {{-- this make the form does contribute the layotu, so it does not break --}}
+            class="contents"
         >
             @csrf
             <x-ui.dropdown.item as="button" type="submit">
-                Sign Out
+                Sair
             </x-ui.dropdown.item>
         </form>
 
