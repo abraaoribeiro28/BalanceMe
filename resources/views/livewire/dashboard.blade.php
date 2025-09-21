@@ -6,15 +6,15 @@
     </x-app.header>
 
     <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-        <x-app.indicator label="Saldo Total" value="0,00" description="Atualizado em 19/09/2025">
+        <x-app.indicator label="Saldo Total" :value="$totalBalance" description="Atualizado em {{ $lastUpdated }}">
             <x-ui.icon name="currency-dollar"/>
         </x-app.indicator>
 
-        <x-app.indicator label="Receitas" value="0,00" description="+0% em relação ao mês anterior" color="text-emerald-500">
+        <x-app.indicator label="Receitas" :value="$incomeTotal" :description="$incomeMoM" color="text-emerald-500">
             <x-ui.icon name="arrow-trending-up" class="!text-emerald-500"/>
         </x-app.indicator>
 
-        <x-app.indicator label="Despesas" value="0,00" description="+0% em relação ao mês anterior" color="text-rose-500">
+        <x-app.indicator label="Despesas" :value="$expenseTotal" :description="$expenseMoM" color="text-rose-500">
             <x-ui.icon name="arrow-trending-down" class="!text-rose-500"/>
         </x-app.indicator>
     </div>
