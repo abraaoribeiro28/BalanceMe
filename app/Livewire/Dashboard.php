@@ -6,8 +6,16 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public function render()
+    public string $tab = 'overview';
+
+    /**
+     * Set the current active tab.
+     *
+     * @param string $tab
+     * @return void
+     */
+    public function setTab(string $tab): void
     {
-        return view('livewire.dashboard');
+        $this->tab = $tab;
     }
 }

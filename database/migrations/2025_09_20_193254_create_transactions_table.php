@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('amount');
+            $table->decimal('amount', 10, 2);
             $table->enum('type', ['Receita', 'Despesa']);
             $table->date('date');
             $table->string('description');

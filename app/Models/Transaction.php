@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'type',
+        'date',
+        'amount',
+        'user_id',
+        'card_id',
+        'category_id',
+        'description',
+    ];
 
     /**
      * Get the card that owns the transaction.
@@ -37,5 +46,19 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Set the "amount" attribute by converting a formatted money value
+     *
+     * @param  string $value
+     * @return void
+     */
+    public function setAmountAttribute(string $value): void
+    {
+        $clean = preg_replace('/[^\d,.-]/', '', $value);
+        $clean = str_replace(['.', ','], ['', '.'], $clean);
+
+        $this->attributes['amount'] = number_format((float) $clean, 2, '.', '');
     }
 }
