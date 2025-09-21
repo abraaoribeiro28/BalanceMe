@@ -18,6 +18,10 @@ class Transaction extends Model
         'description',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     /**
      * Get the card that owns the transaction.
      *

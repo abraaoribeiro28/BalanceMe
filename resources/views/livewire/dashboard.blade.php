@@ -31,7 +31,7 @@
             @if($tab === 'overview')
                 @include('partials.overview')
             @elseif($tab === 'transactions')
-                @include('partials.transactions')
+                <livewire:transactions/>
             @elseif($tab === 'categories')
                 <livewire:categories/>
             @elseif($tab === 'cards')
