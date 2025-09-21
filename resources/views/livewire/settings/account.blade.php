@@ -1,77 +1,77 @@
-<div class="mx-auto space-y-20 mt-20">
+<div class="space-y-20 mt-20  px-4">
     <div>
-        <x-ui.heading>Account Information</x-ui.heading>
-        <x-ui.text class="opacity-50">update your account public crendetiels</x-ui.text>
+        <x-ui.heading>Informações da Conta</x-ui.heading>
+        <x-ui.text class="opacity-50">Atualize suas credenciais públicas</x-ui.text>
         <div class="grow">
-            <form 
+            <form
                 wire:submit="saveChanges"
-                class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
+                class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-neutral-800/10 shadow"
             >
                 <x-ui.field>
-                    <x-ui.label>name</x-ui.label>
+                    <x-ui.label>Nome</x-ui.label>
                     <x-ui.input wire:model="name" />
                     <x-ui.error name="name" />
                 </x-ui.field>
-                
+
                 <x-ui.field>
-                    <x-ui.label>email address</x-ui.label>
-                    <x-ui.input 
+                    <x-ui.label>Endereço de e-mail</x-ui.label>
+                    <x-ui.input
                         wire:model="email"
                         type="email"
-                        copyable 
+                        copyable
                     />
                     <x-ui.error name="email" />
                 </x-ui.field>
-                <x-ui.button 
+                <x-ui.button
                     type="submit"
-                >Save changes</x-ui.button>
+                >Salvar alterações</x-ui.button>
             </form>
         </div>
     </div>
-    
+
     <div>
-        <x-ui.heading>Change password</x-ui.heading>
-        <x-ui.text class="opacity-50">Update your security credentials</x-ui.text>
-        <form 
+        <x-ui.heading>Alterar senha</x-ui.heading>
+        <x-ui.text class="opacity-50">Atualize suas credenciais de segurança</x-ui.text>
+        <form
             wire:submit="updatePassword"
-            class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
+            class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-neutral-800/10 shadow"
         >
-            
+
             <x-ui.field>
-                <x-ui.label>Current Password</x-ui.label>
-                <x-ui.input 
+                <x-ui.label>Senha atual</x-ui.label>
+                <x-ui.input
                     wire:model="current_password"
                     type="password"
-                    revealable 
+                    revealable
                 />
                 <x-ui.error name="current_password" />
             </x-ui.field>
-            
+
             <x-ui.field>
-                <x-ui.label>New Password</x-ui.label>
-                <x-ui.input 
+                <x-ui.label>Nova senha</x-ui.label>
+                <x-ui.input
                     wire:model="password"
                     type="password"
-                    revealable 
+                    revealable
                 />
                 <x-ui.error name="password" />
             </x-ui.field>
-            
+
             <x-ui.field>
-                <x-ui.label>Confirm New Password</x-ui.label>
-                <x-ui.input 
+                <x-ui.label>Confirmar nova senha</x-ui.label>
+                <x-ui.input
                     wire:model="password_confirmation"
                     type="password"
                     revealable
                 />
                 <x-ui.error name="password_confirmation" />
             </x-ui.field>
-            
-            <x-ui.button 
+
+            <x-ui.button
                 type="submit"
                 class="mt-6"
             >
-                Change Password
+                Alterar senha
             </x-ui.button>
         </form>
     </div>
