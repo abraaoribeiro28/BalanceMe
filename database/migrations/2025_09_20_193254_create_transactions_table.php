@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->enum('type', ['Receita', 'Despesa']);
             $table->date('date');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->foreignId('card_id')->nullable()->constrained('cards')->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();

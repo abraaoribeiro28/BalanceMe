@@ -85,6 +85,7 @@ class Transaction extends Component
                 duration: 4000
             );
         } catch (Throwable $exception) {
+            dd($exception);
             $this->dispatch('notify',
                 type: 'error',
                 content: 'Ocorreu um erro ao salvar a transação.',

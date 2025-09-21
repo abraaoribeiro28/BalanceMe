@@ -28,7 +28,7 @@
     </x-ui.field>
 
     <x-ui.field class="mb-4">
-        <x-ui.radio.group wire:model.live.debounce.500ms="type" label="Tipo" variant="segmented" direction="horizontal">
+        <x-ui.radio.group name="transaction_type" wire:model.live.debounce.500ms="type" label="Tipo" variant="segmented" direction="horizontal">
             <x-ui.radio.item
                 value="Receita"
                 label="Receita"
