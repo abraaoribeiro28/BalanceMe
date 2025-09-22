@@ -3,10 +3,7 @@ import './globals/modals.js';
 import './bootstrap';
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
 
-// now you can register
-// components using Alpine.data(...) and
-// plugins using Alpine.plugin(...)
-
-
+import Chart from 'chart.js/auto';
+window.Chart = Chart;
 
 Livewire.start()
