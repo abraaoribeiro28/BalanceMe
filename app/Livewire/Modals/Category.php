@@ -26,7 +26,6 @@ class Category extends Component
         return [
             'name' => 'required|string|min:3|max:50',
             'type' => 'required|in:Receita,Despesa,Ambos',
-            'color' => 'required|string|min:3|max:50',
         ];
     }
 
