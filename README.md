@@ -1,84 +1,98 @@
-# SheafUI Official Starter Kit
+# BalanceMe - App de Finanças Pessoais
 
-The official starter kit to jumpstart your next Laravel application, powered by the SheafUI component platform.
+Aplicação web para controle de receitas e despesas com gráficos comparativos.
+Permite cadastrar transações por categoria e (opcionalmente) cartão de crédito,
+visualizar indicadores do mês, séries históricas dos últimos meses, distribuição
+de despesas por categoria e por cartão de crédito, além de uma lista paginada
+de transações.
 
-## Installation
-to start using new laravel app using this skeleton
+## Visão Geral
 
-```shell
- laravel new example-name --using=sheaf/starter-kit
+- Dashboard com saldo, total de receitas/despesas do mês e variação M/M.
+- Registro rápido de transações (Receita/Despesa) via modal.
+- Categorias personalizadas (Receita, Despesa ou Ambos).
+- Cartões cadastráveis para associar despesas no cartão.
+- Gráficos com Chart.js:
+  - Série temporal (últimos 6 meses) de receitas x despesas.
+  - Distribuição de despesas por categoria (pizza).
+  - Distribuição de despesas por cartão (pizza).
+- Autenticação completa (login, registro, verificação de e‑mail, reset de senha).
+
+## Tecnologias
+
+- `PHP 8.2+`, `Laravel 12`, `Livewire 3`
+- `Tailwind CSS 4`, `Vite`
+- `Chart.js 4`
+- UI baseada em componentes SheafUI
+
+## Requisitos
+
+- PHP 8.2+
+- Composer
+- Node.js 18+ e npm
+- Banco de dados (MYSQL recomendado para desenvolvimento)
+
+## Instalação (Desenvolvimento)
+
+1) Clonar e entrar na pasta do projeto
+```
+    git clone https://github.com/abraaoribeiro28/BalanceMe.git
+    cd BalanceMe
 ```
 
+2) Dependências PHP
+```
+    composer install
+    
+    # Copiar o env
+    cp .env.example .env
+    
+    #Gerar key
+    php artisan key:generate
+```
 
-##  Zero Dependency, Full Control
+3) Banco de dados
+- Configure MySQL (recomendado) no `.env` e crie o banco.
+- Ou SQLite (opção simples, não recomandado):
+  - Criar arquivo: `mkdir -p database && touch database/database.sqlite`
+  - No `.env`, defina: `DB_CONNECTION=sqlite` e comente demais variáveis `DB_*`.
 
-This starter kit requires no external dependencies and gives you **100% ownership** of your code. While powered by SheafUI resources, every line of code is yours to modify and customize as needed.
+4) Migrar e popular dados de exemplo
+```
+    php artisan migrate --seed
+```
 
-## ✨ Features
+5) Dependências front‑end
+```
+    npm install
+```
 
-- [x] **SheafUI Integration** - Optional setup for complete development with the SheafUI platform
-- [x] **Complete Auth System** - Login, register, logout, email verification, password reset/forgot, password confirmation - all with comprehensive tests
-- [x] **Clean Dark Theme** - Seamless light/dark mode switching
-- [x] **Flexible Toast System** - User-friendly notifications out of the box
-- [x] **Basic Account Management** - Update account information (name, email) and change password
+6) Rodar em modo dev (2 opções)
+- Separado: `php artisan serve` e, em outro terminal, `npm run dev`
+- Integrado (server + queue + vite): `composer run dev`
 
-> [!NOTE]
-> Dashboard and settings pages are temporary implementations. They will be refactored once the `sidebar`, `header`, and `navlist` components are built and integrated.
+7) Acessar
+- Abra `http://127.0.0.1:8000`
 
-> [!NOTE]
-> also avatar uplaod will be added once the file upload components is built and integrated
+Credenciais de exemplo (seed):
+- Email: `test@example.com`
+- Senha: `password`
 
+## Principais Telas e Fluxos
 
+- `Dashboard` (`/dashboard`): indicadores e alternância entre abas de visão geral e transações.
+- `Overview` (no dashboard): 3 gráficos (série temporal, despesas por categoria, despesas por cartão) e últimas transações.
+- `Transações`: listagem paginada com categoria, data, valor, tipo e cartão.
+- `Modal de Transação`: nome, valor (máscara monetária), tipo, categoria, cartão (opcional), data e descrição.
+- `Categorias` e `Cartões`: cadastro e manutenção para organização das transações.
 
+## Scripts Úteis
 
-## Tech Stack
+- `composer run dev` — inicia PHP server, fila e Vite juntos (requer Node).
+- `composer test` ou `php artisan test` — executa a suíte de testes.
+- `npm run dev` — build em modo desenvolvimento (Vite).
+- `npm run build` — build para produção.
 
-- **Laravel 12** - Latest Laravel framework
-- **Livewire 3** - Modern reactive components  
-- **Heroicons** - Beautiful SVG icons via `wireui/heroicons`
-- **Sheaf CLI** - SheafUI command-line tools
-- **Tailwind 4** - Modern utility-first CSS framework
-- **Pest 4** - Elegant testing framework
+## Licença
 
-## Included Components
-
-Your starter kit comes pre-loaded with essential UI components:
-
-- [Icon](https://sheafui.dev/docs/components/icon) - SVG icon system
-- [Button](https://sheafui.dev/docs/components/button) - Customizable button variants
-- [Avatar](https://sheafui.dev/docs/components/avatar) - User profile images with fallbacks
-- [Dropdown](https://sheafui.dev/docs/components/dropdown) - Accessible dropdown menus
-- [Input](https://sheafui.dev/docs/components/input) - Form input controls
-- [Separator](https://sheafui.dev/docs/components/separator) - Visual content dividers
-- [Field](https://sheafui.dev/docs/components/field) - Form field wrapper
-- [Fieldset](https://sheafui.dev/docs/components/fieldset) - Grouped form controls
-- [Label](https://sheafui.dev/docs/components/label) - Accessible form labels
-- [Link](https://sheafui.dev/docs/components/link) - Styled navigation links
-- [Theme Switcher](https://sheafui.dev/docs/components/theme-switcher) - Light/dark mode toggle
-- [Toast](https://sheafui.dev/docs/components/toast) - Notification system
-- [Error](https://sheafui.dev/docs/components/error) - Error handling displays
-- [Text](https://sheafui.dev/docs/components/text) - Unified Text styling
-- [Heading](https://sheafui.dev/docs/components/heading) - Heading components
-- [Card](https://sheafui.dev/docs/components/card) - blocks of UI
-
-## Perfect For
-
-- New Laravel projects requiring solid UI foundation.
-- Developers who want proven components without vendor lock-in.
-- Teams needing authentication and theming out of the box.
-
----
-
-Ready to build something amazing? Get started with SheafUI today! 🎉
-
-## Author 
-[MOHAMED CHARRAFI](https://github.com/CharrafiMed)
-
-## Others 
-
-the borders pattern used at home, auth pages was designed by [AYOUB EL HAJJI](https://github.com/Ayoubhj866)
-
-## License
-
-Sheaf UI is open source software licensed under the [MIT License](LICENSE).
-
+Distribuído sob licença MIT. Consulte `LICENCE.md`.
