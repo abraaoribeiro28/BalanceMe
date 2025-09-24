@@ -20,7 +20,7 @@ final class Register extends Component
     {
         $this->form->register();
 
-        Toast::success("Your account has been created successfully!");
+        Toast::success("Sua conta foi criada com sucesso!");
 
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }

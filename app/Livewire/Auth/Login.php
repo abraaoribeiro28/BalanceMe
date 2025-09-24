@@ -26,7 +26,7 @@ final class Login extends Component
 
         Session::regenerate();
 
-        Toast::success("You have successfully logged in!"); 
+        Toast::success("Você fez login com sucesso!");
 
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
