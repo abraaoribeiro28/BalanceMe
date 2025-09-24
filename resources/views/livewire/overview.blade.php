@@ -53,7 +53,7 @@
             </div>
             <div class="p-6 pt-0">
                 <div class="space-y-8">
-                    @foreach($transactions as $transaction)
+                    @forelse($transactions as $transaction)
                         <x-app.transaction-item-simple
                             :label="$transaction['name']"
                             :category="$transaction['category']['name']"
@@ -62,7 +62,11 @@
                             :type="$transaction['type']"
                             :card="$transaction['card']['name'] ?? null"
                         />
-                    @endforeach
+                    @empty
+                        <div class="flex h-[300px] items-center justify-center">
+                            <p class="text-gray-500 dark:text-gray-300">Nenhuma transação registrada neste período</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -72,9 +76,23 @@
                 <p class="text-sm text-gray-500 dark:text-gray-300">Gastos no cartão de crédito do mês atual</p>
             </div>
             <div class="p-6 pt-0">
-                <div class="flex h-[300px] items-center justify-center">
-                    <p class="text-gray-500 dark:text-gray-300">Nenhuma despesa no cartão de crédito neste período</p>
-                </div>
+                @if(count($cardValues))
+                    <div
+                        x-data="window.expenseByCardChart({
+                            labels: @js($cardLabels),
+                            values: @js($cardValues),
+                            colors: @js($cardColors),
+                        })"
+                        x-init="init()"
+                        class="w-full h-64 sm:h-72 md:h-80 lg:h-[300px]"
+                    >
+                        <canvas id="card-chart" class="w-full h-full" wire:ignore></canvas>
+                    </div>
+                @else
+                    <div class="flex h-[300px] items-center justify-center">
+                        <p class="text-gray-500 dark:text-gray-300">Nenhuma despesa no cartão de crédito neste período</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -190,6 +208,52 @@
                     this.chart.data.datasets[0].data = categories.values ?? this.chart.data.datasets[0].data;
                     this.chart.data.datasets[0].backgroundColor = categories.colors ?? this.chart.data.datasets[0].backgroundColor;
                     this.chart.data.datasets[0].borderColor = categories.colors ?? this.chart.data.datasets[0].borderColor;
+                    this.chart.update();
+                });
+            },
+        });
+
+        /* --------- DONUT: Despesas por Cartão --------- */
+        window.expenseByCardChart = (initial) => ({
+            chart: null,
+
+            init() {
+                const ctx = document.getElementById('card-chart').getContext('2d');
+
+                this.chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: initial.labels,
+                        datasets: [{
+                            data: initial.values,
+                            backgroundColor: initial.colors,
+                            borderColor: initial.colors,
+                            borderWidth: 2,
+                            hoverOffset: 8,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: { display: true, position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${ctx.label}: ${brl(ctx.raw)}`
+                                }
+                            }
+                        }
+                    }
+                });
+
+                window.addEventListener('dashboard:charts:update', (e) => {
+                    const { cards } = e.detail;
+                    if (!cards) return;
+                    this.chart.data.labels = cards.labels ?? this.chart.data.labels;
+                    this.chart.data.datasets[0].data = cards.values ?? this.chart.data.datasets[0].data;
+                    this.chart.data.datasets[0].backgroundColor = cards.colors ?? this.chart.data.datasets[0].backgroundColor;
+                    this.chart.data.datasets[0].borderColor = cards.colors ?? this.chart.data.datasets[0].borderColor;
                     this.chart.update();
                 });
             },

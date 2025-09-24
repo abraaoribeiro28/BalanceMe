@@ -19,33 +19,48 @@ class Overview extends Component
     public array $catValues = [];
     public array $catColors = [];
 
+    // Donut por cartão
+    public array $cardLabels = [];
+    public array $cardValues = [];
+    public array $cardColors = [];
+
     public array $transactions = [];
 
     /**
      * initialize dashboard charts with initial data.
-     *
-     * @return void
      */
     public function mount(): void
     {
+        // Barras (6 meses)
         [$this->tsLabels, $this->tsIncome, $this->tsExpense] = $this->buildTimeSeries();
+
+        // Donut por categoria (mês atual)
         [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
-        $this->transactions = Transaction::with('category', 'card')->where('user_id', auth()->id())->orderBy('date', 'desc')->limit(5)->get()->toArray();
+
+        // Donut por cartão (mês atual)
+        [$this->cardLabels, $this->cardValues, $this->cardColors] = $this->buildCardDonut();
+
+        $this->transactions = Transaction::with('category', 'card')
+            ->where('user_id', auth()->id())
+            ->orderBy('date', 'desc')
+            ->limit(5)
+            ->get()
+            ->toArray();
     }
 
     /**
-     * Recompute data and dispatch a single event to update both charts.
-     *
-     * @return void
+     * Recompute data and dispatch a single event to update all charts.
      */
     public function refreshDashboardCharts(): void
     {
         [$tsL, $tsI, $tsE] = $this->buildTimeSeries();
         [$cL, $cV, $cC]    = $this->buildCategoryDonut();
+        [$cdL, $cdV, $cdC] = $this->buildCardDonut();
 
         $this->dispatch('dashboard:charts:update',
             timeseries: ['labels' => $tsL, 'income' => $tsI, 'expense' => $tsE],
             categories: ['labels' => $cL, 'values' => $cV, 'colors' => $cC],
+            cards:      ['labels' => $cdL, 'values' => $cdV, 'colors' => $cdC],
         );
     }
 
@@ -119,7 +134,40 @@ class Overview extends Component
 
         $labels = $rows->pluck('label')->all();
         $values = $rows->pluck('total')->map(fn($v) => (float) $v)->all();
+        $colors = $this->generateDistinctColors(count($labels));
 
+        return [$labels, $values, $colors];
+    }
+
+    /**
+     * Sum current-month expenses grouped by card and build distinct colors.
+     *
+     * Observação: filtra por transações com card_id não nulo (cartões de crédito/débito que você gravar na transação).
+     * Se você tiver um campo específico para "crédito", ajuste o where() conforme necessário.
+     *
+     * @return array{0:list<string>,1:list<float>,2:list<string>} [labels, values, colorsHex]
+     */
+    private function buildCardDonut(): array
+    {
+        $start = now()->startOfMonth()->toDateString();
+        $end   = now()->endOfMonth()->toDateString();
+
+        $rows = Transaction::query()
+            ->join('cards', 'cards.id', '=', 'transactions.card_id')
+            ->where('transactions.user_id', auth()->id())
+            ->where('transactions.type', 'Despesa')
+            ->whereNotNull('transactions.card_id')
+            ->whereBetween('transactions.date', [$start, $end])
+            ->groupBy('cards.id', 'cards.name')
+            ->orderByRaw('SUM(transactions.amount) DESC')
+            ->get([
+                DB::raw('cards.id    AS id'),
+                DB::raw('cards.name  AS label'),
+                DB::raw('SUM(transactions.amount) AS total'),
+            ]);
+
+        $labels = $rows->pluck('label')->all();
+        $values = $rows->pluck('total')->map(fn($v) => (float)$v)->all();
         $colors = $this->generateDistinctColors(count($labels));
 
         return [$labels, $values, $colors];
@@ -128,9 +176,6 @@ class Overview extends Component
     /**
      * Generate N visually distinct colors using HSL with a random hue offset.
      *
-     * @param int $number
-     * @param float $saturation
-     * @param float $lightness
      * @return list<string> HEX colors in the form "#rrggbb"
      * @throws Exception
      */
@@ -152,14 +197,6 @@ class Overview extends Component
         return $colors;
     }
 
-    /**
-     * Convert HSL to HEX.
-     *
-     * @param int $hue
-     * @param float $saturation
-     * @param float $lightness
-     * @return string
-     */
     private function hslToHex(int $hue, float $saturation, float $lightness): string
     {
         $saturation = max(0, min(1, $saturation));
@@ -175,7 +212,7 @@ class Overview extends Component
         elseif ($hue < 180)  { $r1 = 0;  $g1 = $c; $b1 = $x; }
         elseif ($hue < 240)  { $r1 = 0;  $g1 = $x; $b1 = $c; }
         elseif ($hue < 300)  { $r1 = $x; $g1 = 0;  $b1 = $c; }
-        else               { $r1 = $c; $g1 = 0;  $b1 = $x; }
+        else                 { $r1 = $c; $g1 = 0;  $b1 = $x; }
 
         $r = (int) round(($r1 + $m) * 255);
         $g = (int) round(($g1 + $m) * 255);
