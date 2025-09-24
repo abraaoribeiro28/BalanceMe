@@ -31,14 +31,14 @@
             ])>
                 {{ $type === 'Receita' ? '+' : '-' }}R$ {{ $value }}
             </div>
-            <div class="flex gap-2 ml-2">
-                <x-ui.button size="xs" variant="soft" class="!p-0">
-                    <x-ui.icon variant="mini" name="pencil-square"/>
-                </x-ui.button>
-                <x-ui.button size="xs" variant="soft" class="!p-0">
-                    <x-ui.icon variant="mini" name="trash" class="!text-rose-500"/>
-                </x-ui.button>
-            </div>
+{{--            <div class="flex gap-2 ml-2">--}}
+{{--                <x-ui.button size="xs" variant="soft" class="!p-0">--}}
+{{--                    <x-ui.icon variant="mini" name="pencil-square"/>--}}
+{{--                </x-ui.button>--}}
+{{--                <x-ui.button size="xs" variant="soft" class="!p-0">--}}
+{{--                    <x-ui.icon variant="mini" name="trash" class="!text-rose-500"/>--}}
+{{--                </x-ui.button>--}}
+{{--            </div>--}}
         </div>
     </div>
 </div>
