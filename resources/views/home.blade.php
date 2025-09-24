@@ -21,7 +21,9 @@
                     </div>
                 </div>
                 <div class="hidden lg:flex items-center justify-center">
-                    <img alt="Dashboard Preview" class="rounded-lg object-cover" src="{{ asset('images/hero.svg') }}"></div>
+                    <img alt="Dashboard Preview" class="dark:hidden rounded-lg object-cover border border-zinc-300 dark:border-white/20 shadow-2xs" src="{{ asset('images/dashboard-white.webp') }}">
+                    <img alt="Dashboard Preview" class="hidden dark:inline-flex rounded-lg object-cover border border-zinc-300 dark:border-white/20 shadow-2xs" src="{{ asset('images/dashboard-dark.webp') }}">
+                </div>
             </div>
         </div>
     </section>
