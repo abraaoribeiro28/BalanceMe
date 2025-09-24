@@ -7,11 +7,11 @@
         <div class="p-6 pt-0 overflow-auto">
             <div class="space-y-8 mb-6">
                 @foreach($transactions as $transaction)
-                    <x-app.transaction-item-simple
+                    <x-app.transaction-item
                         :label="$transaction->name"
                         :category="$transaction->category->name"
                         :date="$transaction->date->format('d/m/Y')"
-                        :value="$transaction->amount"
+                        :value="number_format($transaction->amount, 2, ',', '.')"
                         :type="$transaction->type"
                         :card="$transaction->card?->name"
                     />

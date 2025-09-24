@@ -53,27 +53,16 @@
             </div>
             <div class="p-6 pt-0">
                 <div class="space-y-8">
-                    <x-app.transaction-item-simple
-                        label="Salário"
-                        category="Salário"
-                        date="há mais de 2 anos"
-                        value="5.000,00"
-                        type="receita"
-                        card="Nubank"
-                    >
-                        <x-ui.icon variant="mini" name="arrow-up" class="!text-emerald-500"/>
-                    </x-app.transaction-item-simple>
-
-                    <x-app.transaction-item-simple
-                        label="Aluguel"
-                        category="Moradia"
-                        date="há mais de 2 anos"
-                        value="1.200,00"
-                        type="despesa"
-                        card="Nubank"
-                    >
-                        <x-ui.icon variant="mini" name="arrow-down" class="!text-rose-500"/>
-                    </x-app.transaction-item-simple>
+                    @foreach($transactions as $transaction)
+                        <x-app.transaction-item-simple
+                            :label="$transaction['name']"
+                            :category="$transaction['category']['name']"
+                            :date="date('d/m/Y'), $transaction['date']"
+                            :value="number_format($transaction['amount'], 2, ',', '.')"
+                            :type="$transaction['type']"
+                            :card="$transaction['card']['name'] ?? null"
+                        />
+                    @endforeach
                 </div>
             </div>
         </div>

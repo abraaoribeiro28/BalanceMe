@@ -23,14 +23,14 @@
             </p>
         </div>
 
-    <div class="flex items-center gap-2">
-        <div @class([
-                'font-medium',
-                'text-emerald-500' => $type === 'Receita' ,
-                'text-rose-500' => $type != 'Receita',
-            ])>
-            {{ $type === 'Receita' ? '+' : '-' }}R$ {{ $value }}
+        <div class="flex items-center gap-2">
+            <div @class([
+                    'font-medium',
+                    'text-emerald-500' => $type === 'Receita' ,
+                    'text-rose-500' => $type !== 'Receita',
+                ])>
+                {{ $type === 'Receita' ? '+' : '-' }}R$ {{ $value }}
+            </div>
         </div>
-    </div>
     </div>
 </div>

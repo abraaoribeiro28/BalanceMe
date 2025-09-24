@@ -19,6 +19,8 @@ class Overview extends Component
     public array $catValues = [];
     public array $catColors = [];
 
+    public array $transactions = [];
+
     /**
      * initialize dashboard charts with initial data.
      *
@@ -28,6 +30,7 @@ class Overview extends Component
     {
         [$this->tsLabels, $this->tsIncome, $this->tsExpense] = $this->buildTimeSeries();
         [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
+        $this->transactions = Transaction::with('category', 'card')->where('user_id', auth()->id())->orderBy('date', 'desc')->limit(5)->get()->toArray();
     }
 
     /**
