@@ -80,6 +80,8 @@ class Transaction extends Component
                 $validated
             );
 
+            $this->dispatch('transaction-saved');
+
             $this->dispatch('notify',
                 type: 'success',
                 content: 'Transação salva com sucesso!.',
