@@ -4,6 +4,7 @@ namespace App\Livewire\Modals;
 
 use App\Models\Card;
 use App\Rules\Money;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use App\Models\Category;
@@ -85,7 +86,7 @@ class Transaction extends Component
                 duration: 4000
             );
         } catch (Throwable $exception) {
-            dd($exception);
+            Log::error('Ocorreu erro ao registrar transação: ' . $exception->getMessage());
             $this->dispatch('notify',
                 type: 'error',
                 content: 'Ocorreu um erro ao salvar a transação.',

@@ -3,6 +3,7 @@
 namespace App\Livewire\Modals;
 
 use App\Models\Category as CategoryModel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -54,6 +55,7 @@ class Category extends Component
                 duration: 4000
             );
         } catch (Throwable $exception) {
+            Log::error('Ocorreu erro ao registrar categoria: ' . $exception->getMessage());
             $this->dispatch('notify',
                 type: 'error',
                 content: 'Ocorreu um erro ao salvar a categoria.',

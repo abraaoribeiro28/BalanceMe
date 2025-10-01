@@ -3,6 +3,7 @@
 namespace App\Livewire\Modals;
 
 use App\Models\Card as CardModel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -51,6 +52,7 @@ class Card extends Component
                 duration: 4000
             );
         } catch (Throwable $exception) {
+            Log::error('Ocorreu erro ao registrar cartão: ' . $exception->getMessage());
             $this->dispatch('notify',
                 type: 'error',
                 content: 'Ocorreu um erro ao salvar o cartão.',
