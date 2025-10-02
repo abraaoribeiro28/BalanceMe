@@ -20,12 +20,12 @@
     </div>
 
     <div class="space-y-4 overflow-x-hidden">
-        <div class="inline-flex items-center rounded-md bg-[#f4f4f5] dark:bg-white/10 p-2 max-w-full overflow-x-auto">
-            <x-ui.button wire:click="setTab('overview')" size="sm" variant="{{ $tab === 'overview' ? 'primary' : 'ghost' }}">Visão Geral</x-ui.button>
-            <x-ui.button wire:click="setTab('transactions')" size="sm" variant="{{ $tab === 'transactions' ? 'primary' : 'ghost' }}">Transações</x-ui.button>
-            <x-ui.button wire:click="setTab('categories')" size="sm" variant="{{ $tab === 'categories' ? 'primary' : 'ghost' }}">Categorias</x-ui.button>
-            <x-ui.button wire:click="setTab('cards')" size="sm" variant="{{ $tab === 'cards' ? 'primary' : 'ghost' }}">Cartões</x-ui.button>
-        </div>
+        <flux:button.group>
+            <flux:button wire:click="setTab('overview')">Visão Geral</flux:button>
+            <flux:button wire:click="setTab('transactions')">Transações</flux:button>
+            <flux:button wire:click="setTab('categories')">Categorias</flux:button>
+            <flux:button wire:click="setTab('cards')">Cartões</flux:button>
+        </flux:button.group>
 
         <div class="mt-2 ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4">
             @if($tab === 'overview')

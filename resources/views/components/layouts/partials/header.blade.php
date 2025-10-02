@@ -14,7 +14,7 @@
             <flux:button href="{{ route('register') }}" variant="primary" class="ml-2">Registre-se</flux:button>
         @else
             <flux:dropdown position="bottom" align="end">
-                <flux:profile name="Olivia Martin" />
+                <flux:profile :name="auth()->user()->name" />
                 <flux:navmenu>
                     <flux:navmenu.item href="{{ route('dashboard') }}" icon="chart-bar" class="hidden max-sm:flex">Dashboard</flux:navmenu.item>
                     <flux:navmenu.item href="{{ route('settings.account') }}" icon="user">Minha conta</flux:navmenu.item>
