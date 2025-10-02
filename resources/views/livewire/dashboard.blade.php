@@ -1,9 +1,9 @@
-<div class="grid gap-4 md:gap-8 pb-8 px-4">
-    <x-app.header title="Dashboard" description="Visão geral das suas finanças">
-        <x-ui.modal.trigger id="modal-transaction">
-            <x-ui.button icon="plus">Nova Transação</x-ui.button>
-        </x-ui.modal.trigger>
-    </x-app.header>
+<div class="max-w-7xl mx-auto grid gap-4 md:gap-8 pb-8 px-4 mt-12">
+    <x-app.heading title="Dashboard" description="Visão geral das suas finanças">
+        <flux:modal.trigger name="edit-profile">
+            <flux:button variant="primary" icon="plus" class="sm:mt-0 mt-4 cursor-pointer">Nova Transação</flux:button>
+        </flux:modal.trigger>
+    </x-app.heading>
 
     <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         <x-app.indicator label="Saldo Total" :value="$totalBalance" description="Atualizado em {{ $lastUpdated }}">

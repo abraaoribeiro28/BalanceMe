@@ -1,93 +1,81 @@
-<x-ui.modal
-    id="modal-transaction"
-    width="lg"
-    backdrop="dark"
-    position="center"
-    heading="Nova Transação"
-    description="Preencha os detalhes da nova transação abaixo"
->
-    <x-ui.field class="mb-4">
-        <x-ui.label>Nome</x-ui.label>
-        <x-ui.input wire:model.live.debounce.500ms="name" placeholder="Ex: Salário, Aluguel, etc."/>
-        <x-ui.error name="name" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.label>Valor</x-ui.label>
-        <x-ui.input wire:model.live.debounce.500ms="amount" placeholder="R$ 0,00"
-            x-ref="money"
-            x-on:input="
-                let value = $refs.money.value.replace(/\D/g, '');
-                value = (value / 100).toFixed(2) + '';
-                value = value.replace('.', ',');
-                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                $refs.money.value = 'R$ ' + value;
-            "
-        />
-        <x-ui.error name="amount" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.radio.group name="transaction_type" wire:model.live.debounce.500ms="type" label="Tipo" variant="segmented" direction="horizontal">
-            <x-ui.radio.item
-                value="Receita"
-                label="Receita"
-            />
-            <x-ui.radio.item
-                value="Despesa"
-                label="Despesa"
-            />
-        </x-ui.radio.group>
-        <x-ui.error name="type" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.label>Categoria</x-ui.label>
-        <x-ui.select
-            placeholder="Selecione uma categoria"
-            wire:model.live.debounce.500ms="category_id">
-            @foreach($categories as $id => $name)
-                <x-ui.select.option value="{{$id}}">{{ $name }}</x-ui.select.option>
-            @endforeach
-        </x-ui.select>
-        <x-ui.error name="category_id" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.label>Cartão de crédito (opcional)</x-ui.label>
-        <x-ui.select
-            placeholder="Selecione um cartão"
-            wire:model.live.debounce.500ms="card_id">
-            @foreach($cards as $id => $name)
-                <x-ui.select.option value="{{$id}}">{{ $name }}</x-ui.select.option>
-            @endforeach
-        </x-ui.select>
-        <x-ui.error name="card_id" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.label>Data</x-ui.label>
-        <x-ui.input type="date" wire:model.live.debounce.500ms="date"/>
-        <x-ui.error name="date" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.label>Descrição (opcional)</x-ui.label>
-        <x-ui.textarea
-            wire:model.live.debounce.500ms="description"
-            placeholder="Descrição..."
-        />
-        <x-ui.error name="description" />
-    </x-ui.field>
-
-    <x-slot name="footer">
-        <div class="w-full flex justify-end space-x-3">
-            <x-ui.button x-on:click="$data.close();" variant="outline">
-                Cancelar
-            </x-ui.button>
-            <x-ui.button wire:click="save()" wire:loading variant="primary">
-                Salvar
-            </x-ui.button>
+<flux:modal name="edit-profile" class="w-[90%] max-w-100" :dismissible="false">
+    <div class="space-y-6">
+        <div>
+            <flux:heading size="lg">Nova Transação</flux:heading>
+            <flux:text class="mt-2">Preencha os detalhes da nova transação abaixo.</flux:text>
         </div>
-    </x-slot>
-</x-ui.modal>
+
+        <div class="space-y-4">
+            <flux:field>
+                <flux:label>Nome</flux:label>
+                <flux:input wire:model.live.debounce.500ms="name" placeholder="Ex: Salário, Aluguel, etc."/>
+                <flux:error name="name" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Valor</flux:label>
+                <flux:input wire:model.live.debounce.500ms="amount" placeholder="R$ 0,00"
+                    x-ref="money"
+                    x-on:input="
+                        let value = $refs.money.value.replace(/\D/g, '');
+                        value = (value / 100).toFixed(2) + '';
+                        value = value.replace('.', ',');
+                        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                        $refs.money.value = 'R$ ' + value;
+                    "
+                />
+                <flux:error name="amount" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Tipo</flux:label>
+                <flux:radio.group wire:model.live.debounce.500ms="type" variant="segmented">
+                    <flux:radio label="Receita" value="Receita" class="cursor-pointer"/>
+                    <flux:radio label="Despesa" value="Despesa" class="cursor-pointer"/>
+                </flux:radio.group>
+                <flux:error name="type" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Categoria</flux:label>
+                <flux:select wire:model.live.debounce.500ms="category_id" placeholder="Selecione uma categoria...">
+                    @foreach($categories as $id => $name)
+                        <flux:select.option value="{{$id}}">{{ $name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:error name="category_id" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label badge="Opcional">Cartão de crédito</flux:label>
+                <flux:select wire:model.live.debounce.500ms="card_id" placeholder="Selecione um cartão...">
+                    @foreach($cards as $id => $name)
+                        <flux:select.option value="{{$id}}">{{ $name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:error name="card_id" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Data</flux:label>
+                <flux:input wire:model.live.debounce.500ms="date" type="date"/>
+                <flux:error name="date" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label badge="Opcional">Descrição</flux:label>
+                <flux:textarea wire:model.live.debounce.500ms="description" placeholder="Descrição..."/>
+                <flux:error name="description" />
+            </flux:field>
+        </div>
+
+        <div class="flex">
+            <flux:spacer />
+            <flux:button wire:click="save" variant="primary" class="cursor-pointer"
+                 wire:target="save, name, amount, type, category_id, card_id, date, description">
+                Salvar
+            </flux:button>
+        </div>
+    </div>
+</flux:modal>
+

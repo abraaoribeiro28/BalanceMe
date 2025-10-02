@@ -14,6 +14,5 @@
         {{ $slot }}
         <x-layouts.partials.footer/>
         @fluxScripts
-        <x-toast/>
     </body>
 </html>

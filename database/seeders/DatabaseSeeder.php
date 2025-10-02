@@ -29,20 +29,20 @@ class DatabaseSeeder extends Seeder
 
                 Category::factory()->count(2)->both()->forUser($user)->create();
 
-                Transaction::factory()
-                    ->count(100)
-                    ->forUser($user)
-                    ->make()
-                    ->each(function (Transaction $t) use ($user, $cards, $incomeCats, $expenseCats) {
-                        if ($t->type === 'Receita') {
-                            $t->category_id = $incomeCats->random()->id;
-                            $t->card_id = null;
-                        } else {
-                            $t->category_id = $expenseCats->random()->id;
-                            $t->card_id = fake()->boolean(80) ? $cards->random()->id : null;
-                        }
-                        $t->save();
-                    });
+//                Transaction::factory()
+//                    ->count(100)
+//                    ->forUser($user)
+//                    ->make()
+//                    ->each(function (Transaction $t) use ($user, $cards, $incomeCats, $expenseCats) {
+//                        if ($t->type === 'Receita') {
+//                            $t->category_id = $incomeCats->random()->id;
+//                            $t->card_id = null;
+//                        } else {
+//                            $t->category_id = $expenseCats->random()->id;
+//                            $t->card_id = fake()->boolean(80) ? $cards->random()->id : null;
+//                        }
+//                        $t->save();
+//                    });
             });
     }
 }
