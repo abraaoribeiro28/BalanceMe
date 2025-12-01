@@ -1,34 +1,35 @@
-<x-ui.modal
-    id="modal-category"
-    width="md"
-    backdrop="dark"
-    position="center"
-    heading="Nova Categoria"
-    description="Preencha os detalhes da nova categoria abaixo"
->
-    <x-ui.field class="mb-4">
-        <x-ui.label>Nome</x-ui.label>
-        <x-ui.input wire:model.live.debounce.500ms="name" placeholder="Ex: Alimentação, Moradia, etc."/>
-        <x-ui.error name="name" />
-    </x-ui.field>
-
-    <x-ui.field class="mb-4">
-        <x-ui.radio.group name="category_type" wire:model.live.debounce.500ms="type" label="Tipo" variant="segmented" direction="horizontal">
-            <x-ui.radio.item value="Receita" label="Receita" />
-            <x-ui.radio.item value="Despesa" label="Despesa" />
-            <x-ui.radio.item value="Ambos" label="Ambos" />
-        </x-ui.radio.group>
-        <x-ui.error name="type" />
-    </x-ui.field>
-
-    <x-slot name="footer">
-        <div class="w-full flex justify-end space-x-3">
-            <x-ui.button x-on:click="$data.close();" variant="outline">
-                Cancelar
-            </x-ui.button>
-            <x-ui.button wire:click="save()" wire:loading variant="primary">
-                Salvar
-            </x-ui.button>
+<flux:modal name="modal-category" class="w-[90%] max-w-100" @close="resetForm" :dismissible="false">
+    <div class="space-y-6">
+        <div>
+            <flux:heading size="lg">Nova Categoria</flux:heading>
+            <flux:text class="mt-2">Preencha os detalhes da nova categoria abaixo.</flux:text>
         </div>
-    </x-slot>
-</x-ui.modal>
+
+        <div class="space-y-4">
+            <flux:field>
+                <flux:label>Nome</flux:label>
+                <flux:input wire:model.live.debounce.500ms="name" placeholder="Ex: Alimentação, Moradia, etc."/>
+                <flux:error name="name" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Tipo</flux:label>
+                <flux:radio.group wire:model.live.debounce.500ms="type" variant="segmented">
+                    <flux:radio label="Receita" value="Receita" class="cursor-pointer"/>
+                    <flux:radio label="Despesa" value="Despesa" class="cursor-pointer"/>
+                    <flux:radio label="Ambos" value="Ambos" class="cursor-pointer"/>
+                </flux:radio.group>
+                <flux:error name="type" />
+            </flux:field>
+        </div>
+
+        <div class="flex">
+            <flux:spacer />
+            <flux:button wire:click="save" variant="primary" class="cursor-pointer"
+                         wire:target="save, name, type">
+                Salvar
+            </flux:button>
+        </div>
+    </div>
+</flux:modal>
+

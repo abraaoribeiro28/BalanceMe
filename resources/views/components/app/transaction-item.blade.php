@@ -1,14 +1,14 @@
 @props(['label', 'category', 'date', 'type', 'value', 'card' => null])
 <div class="flex items-center">
     <div @class([
-                'flex h-9 w-9 items-center justify-center rounded-full',
+                'flex min-h-9 min-w-9 items-center justify-center rounded-full',
                 'bg-emerald-100' => $type === 'Receita',
                 'bg-rose-100' => $type != 'Receita',
             ])>
         @if($type === 'Receita')
-            <x-ui.icon variant="mini" name="arrow-up" class="!text-emerald-500"/>
+            <flux:icon.arrow-up variant="micro" class="!text-emerald-500"/>
         @else
-            <x-ui.icon variant="mini" name="arrow-down" class="!text-rose-500"/>
+            <flux:icon.arrow-down variant="micro" class="!text-rose-500"/>
         @endif
     </div>
     <div class="flex sm:flex-row flex-col sm:justify-between sm:w-full sm:items-center ml-4">

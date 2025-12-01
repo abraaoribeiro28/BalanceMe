@@ -18,7 +18,7 @@
     </div>
     <div class="p-6 pt-0">
         <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
-            <x-ui.icon name="tag"/>
+            <flux:icon.tag variant="mini" />
             <span @class([
                 'text-rose-500' => $type === 'Despesa',
                 'text-smerald-500' => $type === 'Receita',

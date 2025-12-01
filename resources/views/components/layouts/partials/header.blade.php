@@ -31,4 +31,6 @@
             </flux:dropdown>
         </flux:navbar>
     @endguest
+
+    <flux:button x-data x-on:click="$flux.dark = ! $flux.dark">Toggle</flux:button>
 </flux:header>
