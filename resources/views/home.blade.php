@@ -1,6 +1,6 @@
 <main>
-    <section class="lg:min-h-screen w-full flex items-center">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 xl:py-0 pt-60 pb-40">
+    <section class="w-full flex items-center" style="min-height: calc(100vh - 64px)">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 xl:py-0">
             <div class="grid gap-6 lg:grid-cols-2 lg:gap-12">
                 <div class="flex flex-col justify-center space-y-4">
                     <div class="space-y-2">

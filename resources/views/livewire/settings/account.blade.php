@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto space-y-20 pb-8 px-4 mt-12">
+<div class="space-y-20 pb-8">
     <div>
         <flux:heading size="lg" level="1" class="!mb-0">Informações da Conta</flux:heading>
         <flux:subheading size="md">Atualize suas credenciais</flux:subheading>

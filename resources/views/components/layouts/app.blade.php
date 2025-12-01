@@ -11,9 +11,12 @@
     </head>
     <body class="bg-gray-50 dark:bg-gray-900 transition-colors">
         <x-layouts.partials.header/>
-        {{ $slot }}
-        <x-layouts.partials.footer/>
-        @fluxScripts
+
+        <flux:main container>
+            {{ $slot }}
+        </flux:main>
+
         <x-toast/>
+        @fluxScripts
     </body>
 </html>

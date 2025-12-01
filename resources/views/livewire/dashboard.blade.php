@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto grid gap-4 md:gap-8 pb-8 px-4 mt-12">
+<div class="grid gap-4 md:gap-8 pb-8">
     <x-app.heading title="Dashboard" description="Visão geral das suas finanças">
         <flux:modal.trigger name="edit-profile">
             <flux:button variant="primary" icon="plus" class="sm:mt-0 mt-4 cursor-pointer">Nova Transação</flux:button>
