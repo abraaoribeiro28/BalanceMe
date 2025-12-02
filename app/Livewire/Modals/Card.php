@@ -3,6 +3,7 @@
 namespace App\Livewire\Modals;
 
 use App\Models\Card as CardModel;
+use Flux\Flux;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
@@ -48,19 +49,21 @@ class Card extends Component
 
             $this->dispatch('notify',
                 type: 'success',
-                content: 'Cartão salvo com sucesso!.',
+                message: 'Cartão salvo com sucesso!.',
                 duration: 4000
             );
         } catch (Throwable $exception) {
             Log::error('Ocorreu erro ao registrar cartão: ' . $exception->getMessage());
             $this->dispatch('notify',
                 type: 'error',
-                content: 'Ocorreu um erro ao salvar o cartão.',
+                message: 'Ocorreu um erro ao salvar o cartão.',
                 duration: 4000
             );
         }
 
-        $this->dispatch('close-modal', id: 'modal-card');
+        $this->resetForm();
+        Flux::modals()->close();
+        $this->dispatch('load-cards');
     }
 
     /**
@@ -68,10 +71,10 @@ class Card extends Component
      *
      * @return void
      */
-    #[On('close-modal')]
     public function resetForm(): void
     {
         $this->reset();
+        $this->resetValidation();
     }
 }
 
