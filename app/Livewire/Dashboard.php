@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 
 class Dashboard extends Component
 {
@@ -52,7 +53,8 @@ class Dashboard extends Component
      *
      * @return void
      */
-    private function computeMetrics(): void
+    #[On('transaction-saved')]
+    public function computeMetrics(): void
     {
         $userId = auth()->id();
 

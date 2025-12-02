@@ -22,7 +22,7 @@ final class VerifyEmail extends Component
             return;
         }
 
-        $authUser->sendEmailVerificationNotification(); 
+        $authUser->sendEmailVerificationNotification();
 
         Session::flash('status', 'verification-link-sent');
     }
@@ -32,6 +32,6 @@ final class VerifyEmail extends Component
         /** @var View $view */
         $view = view('livewire.auth.verify-email');
 
-        return $view->layout('components.layouts.guest');
+        return $view->layout('components.layouts.portal');
     }
 }

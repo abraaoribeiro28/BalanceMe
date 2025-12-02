@@ -8,9 +8,12 @@
             <div class="space-y-4">
                 <div class="sm:flex justify-between items-center">
                     <h3 class="text-lg font-medium sm:mb-0 mb-2">Seus Cartões de Crédito</h3>
-                    <x-ui.modal.trigger id="modal-card">
-                        <x-ui.button icon="plus">Adicionar cartão</x-ui.button>
-                    </x-ui.modal.trigger>
+{{--                    <x-ui.modal.trigger id="modal-card">--}}
+{{--                        <x-ui.button icon="plus">Adicionar cartão</x-ui.button>--}}
+{{--                    </x-ui.modal.trigger>--}}
+                    <flux:modal.trigger name="modal-cards">
+                        <flux:button variant="primary" icon="plus" class="sm:mt-0 mt-4 cursor-pointer">Nova Transação</flux:button>
+                    </flux:modal.trigger>
                 </div>
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     @foreach($cards as $card)

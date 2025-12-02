@@ -53,15 +53,18 @@ class Account extends Component
 
         $user->fill($validated);
 
-        // If the email changed we need to make it unverified, for security reasons 
+        // If the email changed we need to make it unverified, for security reasons
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         $user->save();
 
-
-        $this->toastSuccess('Your account has been updated.');
+        $this->dispatch(
+            event: 'notify',
+            type: 'success',
+            message: 'Sua conta foi atualizada.'
+        );
     }
 
     /**
@@ -86,7 +89,11 @@ class Account extends Component
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        $this->toastSuccess('Your password has been updated.');
+        $this->dispatch(
+            event: 'notify',
+            type: 'success',
+            message: 'Sua senha foi atualizada.'
+        );
     }
     public function render()
     {

@@ -1,65 +1,68 @@
-<x-slot:title>
-    Register an account
-</x-slot>
-
-<form
-    wire:submit="register"
-    class="mx-auto w-full max-w-md space-y-4 px-6"
->
-    <div class="space-y-4 gap-y-1">
-        <x-ui.field >
-            <x-ui.label>Nome</x-ui.label>
-            <x-ui.input
-                wire:model="form.name"
-                placeholder="Digite seu nome"
-            />
-            <x-ui.error name="form.name" />
-        </x-ui.field>
-
-        <x-ui.field >
-            <x-ui.label>E-mail</x-ui.label>
-            <x-ui.input
-                wire:model="form.email"
-                type="email"
-                placeholder="seu@email.com"
-            />
-            <x-ui.error name="form.email" />
-        </x-ui.field>
-
-        <x-ui.field >
-            <x-ui.label>Senha</x-ui.label>
-            <x-ui.input
-                wire:model="form.password"
-                type="password"
-                revealable
-                placeholder="Digite uma senha"
-            />
-            <x-ui.error name="form.password" />
-        </x-ui.field>
-
-        <x-ui.field >
-            <x-ui.label>Corfirmação da senha</x-ui.label>
-            <x-ui.input
-                wire:model="form.password_confirmation"
-                type="password"
-                revealable
-                placeholder="Confirme a senha"
-            />
-            <x-ui.error name="form.password_confirmation" />
-        </x-ui.field>
+<div class="flex flex-col gap-6">
+    <div class="flex w-full flex-col text-center">
+        <flux:heading size="xl">{{ __('Create an account') }}</flux:heading>
+        <flux:subheading>{{ __('Enter your details below to create your account') }}</flux:subheading>
     </div>
 
-    <x-ui.button
-        class="w-full"
-        type="submit"
-    >
-        Registrar
-    </x-ui.button>
+    @if (session('status'))
+        <div class="font-medium text-sm text-green-600">
+            {{ session('status') }}
+        </div>
+    @endif
 
-    <x-ui.link
-        variant="soft"
-        href="{{ route('login') }}"
-    >
-        Já tem uma conta? <span class="underline">Entrar</span>
-    </x-ui.link>
-</form>
+    <form wire:submit="register" class="flex flex-col gap-6">
+        <!-- Name -->
+        <flux:input
+            wire:model="form.name"
+            :label="__('Name')"
+            type="text"
+            required
+            autofocus
+            autocomplete="name"
+            :placeholder="__('Full name')"
+        />
+
+        <!-- Email Address -->
+        <flux:input
+            wire:model="form.email"
+            :label="__('Email address')"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="email@exemplo.com"
+        />
+
+        <!-- Password -->
+        <flux:input
+            wire:model="form.password"
+            :label="__('Password')"
+            type="password"
+            required
+            autocomplete="new-password"
+            :placeholder="__('Password')"
+            viewable
+        />
+
+        <!-- Confirm Password -->
+        <flux:input
+            wire:model="form.password_confirmation"
+            :label="__('Confirm password')"
+            type="password"
+            required
+            autocomplete="new-password"
+            :placeholder="__('Confirm password')"
+            viewable
+        />
+
+        <div class="flex items-center justify-end">
+            <flux:button type="submit" variant="primary" class="w-full">
+                {{ __('Create account') }}
+            </flux:button>
+        </div>
+    </form>
+
+    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+        {{ __('Already have an account?') }}
+        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+    </div>
+</div>

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Overview extends Component
@@ -31,37 +32,34 @@ class Overview extends Component
      */
     public function mount(): void
     {
-        // Barras (6 meses)
-        [$this->tsLabels, $this->tsIncome, $this->tsExpense] = $this->buildTimeSeries();
-
-        // Donut por categoria (mês atual)
-        [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
-
-        // Donut por cartão (mês atual)
-        [$this->cardLabels, $this->cardValues, $this->cardColors] = $this->buildCardDonut();
-
-        $this->transactions = Transaction::with('category', 'card')
-            ->where('user_id', auth()->id())
-            ->orderBy('date', 'desc')
-            ->limit(5)
-            ->get()
-            ->toArray();
+        $this->refreshDashboardCharts();
     }
 
     /**
      * Recompute data and dispatch a single event to update all charts.
      */
+    #[On('transaction-saved')]
     public function refreshDashboardCharts(): void
     {
-        [$tsL, $tsI, $tsE] = $this->buildTimeSeries();
-        [$cL, $cV, $cC]    = $this->buildCategoryDonut();
-        [$cdL, $cdV, $cdC] = $this->buildCardDonut();
+        [$this->tsLabels, $this->tsIncome, $this->tsExpense] = $this->buildTimeSeries();
+        [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
+        [$this->cardLabels, $this->cardValues, $this->cardColors] = $this->buildCardDonut();
+        $this->transactions = $this->loadRecentTransactions();
+    }
 
-        $this->dispatch('dashboard:charts:update',
-            timeseries: ['labels' => $tsL, 'income' => $tsI, 'expense' => $tsE],
-            categories: ['labels' => $cL, 'values' => $cV, 'colors' => $cC],
-            cards:      ['labels' => $cdL, 'values' => $cdV, 'colors' => $cdC],
-        );
+    /**
+     * Fetch the five most recent transactions with relations for the overview cards.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function loadRecentTransactions(): array
+    {
+        return Transaction::with('category', 'card')
+            ->where('user_id', auth()->id())
+            ->orderBy('date', 'desc')
+            ->limit(5)
+            ->get()
+            ->toArray();
     }
 
     /**
@@ -113,6 +111,7 @@ class Overview extends Component
      * Sum current-month expenses grouped by category and build distinct colors.
      *
      * @return array{0:list<string>,1:list<float>,2:list<string>} [labels, values, colorsHex]
+     * @throws Exception
      */
     private function buildCategoryDonut(): array
     {
@@ -133,7 +132,7 @@ class Overview extends Component
             ]);
 
         $labels = $rows->pluck('label')->all();
-        $values = $rows->pluck('total')->map(fn($v) => (float) $v)->all();
+        $values = $rows->pluck('total')->map(fn ($v) => (float) $v)->all();
         $colors = $this->generateDistinctColors(count($labels));
 
         return [$labels, $values, $colors];
@@ -146,6 +145,7 @@ class Overview extends Component
      * Se você tiver um campo específico para "crédito", ajuste o where() conforme necessário.
      *
      * @return array{0:list<string>,1:list<float>,2:list<string>} [labels, values, colorsHex]
+     * @throws Exception
      */
     private function buildCardDonut(): array
     {

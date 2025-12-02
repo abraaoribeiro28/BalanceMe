@@ -18,7 +18,7 @@
     </div>
     <div class="p-6 pt-0">
         <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
-            <x-ui.icon name="credit-card"/>
+            <flux:icon.credit-card variant="mini" />
             <span>Cartão de Crédito</span>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <main>
-    <section class="lg:min-h-screen w-full flex items-center">
-        <div class="max-w-7xl mx-auto px-4 md:px-6 xl:py-0 pt-60 pb-40">
+    <section class="w-full flex items-center" style="min-height: calc(100vh - 64px)">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 xl:py-0">
             <div class="grid gap-6 lg:grid-cols-2 lg:gap-12">
                 <div class="flex flex-col justify-center space-y-4">
                     <div class="space-y-2">
@@ -12,12 +12,8 @@
                             financeiras mais inteligentes.</p>
                     </div>
                     <div class="flex flex-col gap-2 min-[400px]:flex-row">
-                        <x-ui.button href="/register" icon-after="chevron-right">
-                            Começar agora
-                        </x-ui.button>
-                        <x-ui.button variant="outline" href="/login">
-                            Já tenho uma conta
-                        </x-ui.button>
+                        <flux:button variant="primary" icon:trailing="chevron-right" class="cursor-pointer">Começar agora</flux:button>
+                        <flux:button variant="filled" class="cursor-pointer">Já tenho uma conta</flux:button>
                     </div>
                 </div>
                 <div class="hidden lg:flex items-center justify-center">
@@ -27,7 +23,7 @@
             </div>
         </div>
     </section>
-    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-neutral-800">
+    <section class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div class="flex flex-col items-center justify-center space-y-4 text-center">
                 <div class="space-y-2">

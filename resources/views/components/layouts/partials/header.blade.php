@@ -1,130 +1,36 @@
-<header
-    x-data="{ open: false }"
-    x-on:keydown.window.escape="open = false"
-    class="border-b-neutral-100 dark:border-b-neutral-800 dark:bg-neutral-900 bg-neutral-50 fixed inset-x-0 top-0 z-50 border-b"
->
-    <nav
-        class="mx-auto flex items-center justify-between max-w-7xl px-4 py-3 text-base-100"
-        aria-label="global"
-    >
-        <div class="flex pr-7">
-                <x-app.logo />
-        </div>
+<flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700 transition-colors">
+    <flux:brand logo="{{ asset('images/logo.webp') }}" name="BalanceMe"/>
 
-        <div
-            class="flex lg:hidden gap-4 items-center"
-        >
-            <button
-                type="button"
-                class="bg-base-200/6 text-base-100 ring-base-200/10 hover:bg-base-200/10 inline-flex h-8 w-8 items-center justify-center rounded-field text-sm font-medium ring-1 ring-inset"
-                x-on:click="open = true"
-            >
-                <span class="sr-only">Open main menu</span>
-                <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25"
-                    />
-                </svg>
-            </button>
-        </div>
+    @auth
+        <flux:navbar class="-mb-px  max-md:hidden">
+            <flux:navbar.item icon="chart-bar" href="{{ route('dashboard') }}">Dashboard</flux:navbar.item>
+        </flux:navbar>
+    @endauth
 
-        <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
-            @guest
-                <div class="space-x-4">
-                    <a href="{{ route('login') }}" class="text-sm font-semibold leading-6 text-neutral-900 dark:text-neutral-200">
-                        Entrar
-                    </a>
-                    <a href="{{ route('register') }}" class="rounded-md border border-neutral-300/40 bg-neutral-50 px-3 py-1 text-sm font-semibold text-neutral-900 dark:border-white/20 dark:bg-white/5 dark:text-white">
-                        Registre-se
-                    </a>
-                </div>
-            @endguest
+    <flux:spacer />
 
-            @auth
-                <x-user-dropdown/>
-            @endauth
+    @guest
+        <flux:navbar class="-mb-px">
+            <flux:button href="{{ route('login') }}" size="sm" variant="filled">Entrar</flux:button>
+            <flux:button href="{{ route('register') }}" size="sm" variant="primary" class="ml-1">Registre-se</flux:button>
+        </flux:navbar>
+    @else
+        <flux:navbar class="-mb-px">
+            <flux:dropdown position="top" align="start">
+                <flux:profile :name="auth()->user()->name" class="cursor-pointer"/>
+                <flux:navmenu>
+                    <flux:navmenu.item href="{{ route('dashboard') }}" icon="chart-bar" class="hidden max-sm:flex">Dashboard</flux:navmenu.item>
+                    <flux:navmenu.item href="{{ route('settings.account') }}" icon="user">Minha conta</flux:navmenu.item>
+                    <form method="POST" action="{{ route('app.auth.logout') }}" class="w-full">
+                        @csrf
+                        <flux:navmenu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                            {{ __('Log Out') }}
+                        </flux:navmenu.item>
+                    </form>
+                </flux:navmenu>
+            </flux:dropdown>
+        </flux:navbar>
+    @endguest
 
-            <x-ui.separator
-                class="my-2"
-                vertical
-            />
-
-            <x-ui.theme-switcher variant="inline"/>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div x-show="open"
-         class="lg:hidden"
-         x-ref="dialog"
-         x-cloak=""
-         aria-modal="true">
-        <div class="fixed inset-0 z-50 bg-background"></div>
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
-             x-on:click.away="open = false">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <x-app.logo />
-                </div>
-
-                <div class="flex items-center">
-                <button type="button"
-                        class="-m-2.5 rounded-md p-2.5 text-base-100"
-                        x-on:click="open = false">
-                    <span class="sr-only">Close menu</span>
-                    <svg class="h-6 w-6"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke-width="1.5"
-                         stroke="currentColor">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                </div>
-            </div>
-            <div class="mt-6 flow-root">
-                <div class="-my-6 divide-y divide-base-200/10">
-                    <div class="py-6">
-                        @guest
-                            <a href="{{ route('login') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Entrar</a>
-                            <a href="{{ route('register') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Registre-se</a>
-                        @else
-                            <a href="{{ route('dashboard') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('settings.account') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
-                                Minha conta
-                            </a>
-                            <form
-                                action="{{ route('app.auth.logout') }}"
-                                method="post"
-                                class="contents"
-                            >
-                                @csrf
-                                <button type="submit"
-                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">
-                                    Sair
-                                </button>
-                            </form>
-                        @endguest
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+    <flux:button x-data x-on:click="$flux.dark = ! $flux.dark">Toggle</flux:button>
+</flux:header>

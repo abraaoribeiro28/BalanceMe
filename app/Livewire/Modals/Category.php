@@ -3,6 +3,8 @@
 namespace App\Livewire\Modals;
 
 use App\Models\Category as CategoryModel;
+use Flux\Flux;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,9 +12,8 @@ use Throwable;
 
 class Category extends Component
 {
-    public string $name;
-    public string $type;
-    public string $color;
+    public ?string $name = null;
+    public string $type = '';
 
     public CategoryModel|null $category = null;
 
@@ -50,18 +51,21 @@ class Category extends Component
 
             $this->dispatch('notify',
                 type: 'success',
-                content: 'Categoria salva com sucesso!.',
+                message: 'Categoria salva com sucesso!.',
                 duration: 4000
             );
         } catch (Throwable $exception) {
+            Log::error('Ocorreu erro ao registrar categoria: ' . $exception->getMessage());
             $this->dispatch('notify',
                 type: 'error',
-                content: 'Ocorreu um erro ao salvar a categoria.',
+                message: 'Ocorreu um erro ao salvar a categoria.',
                 duration: 4000
             );
         }
 
-        $this->dispatch('close-modal', id: 'modal-category');
+        $this->resetForm();
+        Flux::modals()->close();
+        $this->dispatch('load-categories');
     }
 
     /**
@@ -69,10 +73,10 @@ class Category extends Component
      *
      * @return void
      */
-    #[On('close-modal')]
     public function resetForm(): void
     {
         $this->reset();
+        $this->resetValidation();
     }
 }
 

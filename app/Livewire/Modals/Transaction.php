@@ -4,6 +4,8 @@ namespace App\Livewire\Modals;
 
 use App\Models\Card;
 use App\Rules\Money;
+use Flux\Flux;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use App\Models\Category;
@@ -16,8 +18,8 @@ class Transaction extends Component
     public string $name;
     public string $amount;
     public string $type;
-    public int $category_id;
-    public int $card_id;
+    public int|string $category_id = '';
+    public $card_id = '';
     public $date;
     public string $description;
 
@@ -72,6 +74,7 @@ class Transaction extends Component
     {
         $validated = $this->validate();
         $validated['user_id'] = auth()->id();
+        $validated['card_id'] = $validated['card_id'] === '' ? null : $validated['card_id'];
 
         try {
             TransactionModel::updateOrCreate(
@@ -79,17 +82,22 @@ class Transaction extends Component
                 $validated
             );
 
-            $this->dispatch('notify',
+            $this->dispatch('transaction-saved');
+
+            $this->dispatch(
+                event: 'notify',
                 type: 'success',
-                content: 'Transação salva com sucesso!.',
-                duration: 4000
+                message: 'Transação salva com sucesso!'
             );
+
+            Flux::modals()->close();
         } catch (Throwable $exception) {
-            dd($exception);
-            $this->dispatch('notify',
+            Log::error('Ocorreu erro ao registrar transação: ' . $exception->getMessage());
+
+            $this->dispatch(
+                'notify',
                 type: 'error',
-                content: 'Ocorreu um erro ao salvar a transação.',
-                duration: 4000
+                message: 'Ocorreu um erro ao salvar a transação.'
             );
         }
 

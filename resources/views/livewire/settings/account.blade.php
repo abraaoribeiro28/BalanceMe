@@ -1,78 +1,58 @@
-<div class="space-y-20 mt-20  px-4">
+<div class="space-y-20 pb-8">
     <div>
-        <x-ui.heading>Informações da Conta</x-ui.heading>
-        <x-ui.text class="opacity-50">Atualize suas credenciais públicas</x-ui.text>
+        <flux:heading size="lg" level="1" class="!mb-0">Informações da Conta</flux:heading>
+        <flux:subheading size="md">Atualize suas credenciais</flux:subheading>
+
+
         <div class="grow">
             <form
                 wire:submit="saveChanges"
-                class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-neutral-800/10 shadow"
+                class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-gray-800/80 shadow"
             >
-                <x-ui.field>
-                    <x-ui.label>Nome</x-ui.label>
-                    <x-ui.input wire:model="name" />
-                    <x-ui.error name="name" />
-                </x-ui.field>
+                <flux:field>
+                    <flux:label>Nome</flux:label>
+                    <flux:input wire:model="name" />
+                    <flux:error name="name" />
+                </flux:field>
 
-                <x-ui.field>
-                    <x-ui.label>Endereço de e-mail</x-ui.label>
-                    <x-ui.input
-                        wire:model="email"
-                        type="email"
-                        copyable
-                    />
-                    <x-ui.error name="email" />
-                </x-ui.field>
-                <x-ui.button
-                    type="submit"
-                >Salvar alterações</x-ui.button>
+                <flux:field>
+                    <flux:label>Endereço de e-mail</flux:label>
+                    <flux:input wire:model="email" />
+                    <flux:error name="email" type="email"/>
+                </flux:field>
+
+                <flux:button variant="primary" type="submit" class="cursor-pointer">Salvar</flux:button>
             </form>
         </div>
     </div>
 
     <div>
-        <x-ui.heading>Alterar senha</x-ui.heading>
-        <x-ui.text class="opacity-50">Atualize suas credenciais de segurança</x-ui.text>
+        <flux:heading size="lg" level="1" class="!mb-0">Alterar senha</flux:heading>
+        <flux:subheading size="md">Atualize suas credenciais de segurança</flux:subheading>
+
         <form
             wire:submit="updatePassword"
-            class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-neutral-800/10 shadow"
+            class="mt-8 space-y-4 rounded-lg bg-neutral-50 p-6 dark:bg-gray-800/80 shadow"
         >
+            <flux:field>
+                <flux:label>Senha atual</flux:label>
+                <flux:input wire:model="current_password" type="password"/>
+                <flux:error name="current_password" />
+            </flux:field>
 
-            <x-ui.field>
-                <x-ui.label>Senha atual</x-ui.label>
-                <x-ui.input
-                    wire:model="current_password"
-                    type="password"
-                    revealable
-                />
-                <x-ui.error name="current_password" />
-            </x-ui.field>
+            <flux:field>
+                <flux:label>Nova senha</flux:label>
+                <flux:input wire:model="password" type="password"/>
+                <flux:error name="password" />
+            </flux:field>
 
-            <x-ui.field>
-                <x-ui.label>Nova senha</x-ui.label>
-                <x-ui.input
-                    wire:model="password"
-                    type="password"
-                    revealable
-                />
-                <x-ui.error name="password" />
-            </x-ui.field>
+            <flux:field>
+                <flux:label>Confirmar nova senha</flux:label>
+                <flux:input wire:model="password_confirmation" type="password"/>
+                <flux:error name="password_confirmation"/>
+            </flux:field>
 
-            <x-ui.field>
-                <x-ui.label>Confirmar nova senha</x-ui.label>
-                <x-ui.input
-                    wire:model="password_confirmation"
-                    type="password"
-                    revealable
-                />
-                <x-ui.error name="password_confirmation" />
-            </x-ui.field>
-
-            <x-ui.button
-                type="submit"
-                class="mt-6"
-            >
-                Alterar senha
-            </x-ui.button>
+            <flux:button variant="primary" type="submit" class="cursor-pointer">Alterar senha</flux:button>
         </form>
     </div>
 </div>
