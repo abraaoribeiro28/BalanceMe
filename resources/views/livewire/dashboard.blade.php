@@ -7,15 +7,15 @@
 
     <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         <x-app.indicator label="Saldo Total" :value="$totalBalance" description="Atualizado em {{ $lastUpdated }}">
-            <x-ui.icon name="currency-dollar"/>
+            <flux:icon.currency-dollar/>
         </x-app.indicator>
 
         <x-app.indicator label="Receitas" :value="$incomeTotal" :description="$incomeMoM" color="text-emerald-500">
-            <x-ui.icon name="arrow-trending-up" class="!text-emerald-500"/>
+            <flux:icon.arrow-trending-down class="text-emerald-500"/>
         </x-app.indicator>
 
         <x-app.indicator label="Despesas" :value="$expenseTotal" :description="$expenseMoM" color="text-rose-500">
-            <x-ui.icon name="arrow-trending-down" class="!text-rose-500"/>
+            <flux:icon.arrow-trending-up class="text-rose-500"/>
         </x-app.indicator>
     </div>
 
