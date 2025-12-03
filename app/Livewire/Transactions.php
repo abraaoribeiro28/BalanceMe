@@ -23,7 +23,7 @@ class Transactions extends Component
         $transactions = Transaction::with('category', 'card')
             ->where('user_id', auth()->id())
             ->orderBy('date', 'desc')
-            ->paginate(1);
+            ->paginate();
 
         return view('livewire.transactions', compact('transactions'));
     }
