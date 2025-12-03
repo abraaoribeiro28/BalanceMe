@@ -9,7 +9,7 @@ use Livewire\Attributes\On;
 
 class Dashboard extends Component
 {
-    public string $tab = 'overview';
+
 
     public string $totalBalance = '0,00';
     public string $incomeTotal = '0,00';
@@ -27,17 +27,6 @@ class Dashboard extends Component
     {
         $this->lastUpdated = Carbon::now()->format('d/m/Y');
         $this->computeMetrics();
-    }
-
-    /**
-     * Set the current active tab.
-     *
-     * @param string $tab
-     * @return void
-     */
-    public function setTab(string $tab): void
-    {
-        $this->tab = $tab;
     }
 
     /**

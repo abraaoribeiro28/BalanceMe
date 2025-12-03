@@ -19,24 +19,30 @@
         </x-app.indicator>
     </div>
 
-    <div class="space-y-4 overflow-x-hidden">
+    <div
+        x-data="{ tab: 'overview' }"
+        class="space-y-4 overflow-x-hidden"
+    >
         <flux:button.group>
-            <flux:button wire:click="setTab('overview')">Visão Geral</flux:button>
-            <flux:button wire:click="setTab('transactions')">Transações</flux:button>
-            <flux:button wire:click="setTab('categories')">Categorias</flux:button>
-            <flux:button wire:click="setTab('cards')">Cartões</flux:button>
+            <flux:button @click="tab = 'overview'">Visão Geral</flux:button>
+            <flux:button @click="tab = 'transactions'">Transações</flux:button>
+            <flux:button @click="tab = 'categories'">Categorias</flux:button>
+            <flux:button @click="tab = 'cards'">Cartões</flux:button>
         </flux:button.group>
 
         <div class="mt-2 ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4">
-            @if($tab === 'overview')
-                <livewire:overview/>
-            @elseif($tab === 'transactions')
-                <livewire:transactions/>
-            @elseif($tab === 'categories')
-                <livewire:categories/>
-            @elseif($tab === 'cards')
-                <livewire:cards/>
-            @endif
+            <div x-show="tab === 'overview'" x-cloak>
+                <livewire:overview wire:key="tab-overview" />
+            </div>
+            <div x-show="tab === 'transactions'" x-cloak>
+                <livewire:transactions wire:key="tab-transactions" />
+            </div>
+            <div x-show="tab === 'categories'" x-cloak>
+                <livewire:categories wire:key="tab-categories" />
+            </div>
+            <div x-show="tab === 'cards'" x-cloak>
+                <livewire:cards wire:key="tab-cards" />
+            </div>
         </div>
     </div>
 
