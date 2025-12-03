@@ -1,25 +1,10 @@
-@props(['label', 'color'])
+@props(['label'])
 
-<div class="rounded-lg border border-zinc-300 dark:border-white/20 text-card-foreground shadow-2xs relative">
-    <div class="flex flex-col space-y-1.5 p-6 pb-2">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <h3 class="font-semibold tracking-tight text-lg">{{ $label }}</h3>
-            </div>
-{{--            <div class="flex gap-1">--}}
-{{--                <x-ui.button size="xs" variant="soft" class="!p-0">--}}
-{{--                    <x-ui.icon variant="mini" name="pencil-square"/>--}}
-{{--                </x-ui.button>--}}
-{{--                <x-ui.button size="xs" variant="soft" class="!p-0">--}}
-{{--                    <x-ui.icon variant="mini" name="trash" class="!text-rose-500"/>--}}
-{{--                </x-ui.button>--}}
-{{--            </div>--}}
-        </div>
-    </div>
-    <div class="p-6 pt-0">
-        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
-            <flux:icon.credit-card variant="mini" />
-            <span>Cartão de Crédito</span>
+<div class="rounded-lg bg-white dark:bg-white/10 border border-gray-800/15 dark:border-white/10 text-card-foreground relative">
+    <div class="flex flex-col p-6">
+        <div class="flex items-center gap-x-2">
+            <flux:icon.credit-card variant="solid" />
+            <h3 class="font-medium tracking-tight text-md text-nowrap text-ellipsis">{{ $label }}</h3>
         </div>
     </div>
 </div>
