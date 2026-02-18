@@ -14,7 +14,7 @@
                 </div>
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     @foreach($categories as $category)
-                        <x-app.category :label="$category->name" color="!bg-[{{$category->color}}]" :type="$category->type"/>
+                        <x-app.category :label="$category->name" :type="$category->type"/>
                     @endforeach
                 </div>
             </div>
@@ -23,4 +23,3 @@
 
     <livewire:modals.category/>
 </div>
-

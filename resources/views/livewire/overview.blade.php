@@ -54,13 +54,16 @@
             <div class="p-6 pt-0">
                 <div class="space-y-8">
                     @forelse($transactions as $transaction)
+                        @php
+                            $transactionDate = data_get($transaction, 'date');
+                        @endphp
                         <x-app.transaction-item-simple
-                            :label="$transaction['name']"
-                            :category="$transaction['category']['name']"
-                            :date="date('d/m/Y'), $transaction['date']"
-                            :value="number_format($transaction['amount'], 2, ',', '.')"
-                            :type="$transaction['type']"
-                            :card="$transaction['card']['name'] ?? null"
+                            :label="data_get($transaction, 'name')"
+                            :category="data_get($transaction, 'category.name', 'Sem categoria')"
+                            :date="$transactionDate ? \Illuminate\Support\Carbon::parse($transactionDate)->format('d/m/Y') : '--/--/----'"
+                            :value="number_format((float) data_get($transaction, 'amount', 0), 2, ',', '.')"
+                            :type="data_get($transaction, 'type')"
+                            :card="data_get($transaction, 'card.name')"
                         />
                     @empty
                         <div class="flex h-[300px] items-center justify-center">

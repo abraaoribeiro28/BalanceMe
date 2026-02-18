@@ -45,6 +45,25 @@ class Overview extends Component
         [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
         [$this->cardLabels, $this->cardValues, $this->cardColors] = $this->buildCardDonut();
         $this->transactions = $this->loadRecentTransactions();
+
+        $this->dispatch(
+            'dashboard:charts:update',
+            timeseries: [
+                'labels' => $this->tsLabels,
+                'income' => $this->tsIncome,
+                'expense' => $this->tsExpense,
+            ],
+            categories: [
+                'labels' => $this->catLabels,
+                'values' => $this->catValues,
+                'colors' => $this->catColors,
+            ],
+            cards: [
+                'labels' => $this->cardLabels,
+                'values' => $this->cardValues,
+                'colors' => $this->cardColors,
+            ],
+        );
     }
 
     /**
@@ -85,22 +104,25 @@ class Overview extends Component
             $expense[$key] = 0.0;
         }
 
-        $rows = Transaction::selectRaw("
-                YEAR(date) y, MONTH(date) m,
-                SUM(CASE WHEN type='Receita' THEN amount ELSE 0 END) income,
-                SUM(CASE WHEN type='Despesa' THEN amount ELSE 0 END) expense
-            ")
+        $rows = Transaction::query()
+            ->select(['date', 'type', 'amount'])
             ->where('user_id', auth()->id())
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-            ->groupByRaw('YEAR(date), MONTH(date)')
-            ->orderByRaw('y, m')
+            ->orderBy('date')
             ->get();
 
         foreach ($rows as $r) {
-            $key = sprintf('%04d-%02d', $r->y, $r->m);
+            $key = $r->date->format('Y-m');
+
             if (isset($income[$key])) {
-                $income[$key]  = (float)$r->income;
-                $expense[$key] = (float)$r->expense;
+                if ($r->type === 'Receita') {
+                    $income[$key] += (float) $r->amount;
+                    continue;
+                }
+
+                if ($r->type === 'Despesa') {
+                    $expense[$key] += (float) $r->amount;
+                }
             }
         }
 

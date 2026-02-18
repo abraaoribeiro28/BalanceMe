@@ -3,12 +3,29 @@
      class="fixed top-5 right-6 z-999 mx-auto w-fit hidden"
 >
     <div
-        x-data="{ showToast: false, type: '', message: '' }"
+        x-data="{
+            showToast: false,
+            type: '',
+            message: '',
+            init() {
+                const flash = @js(session('notify'));
+
+                if (!flash) {
+                    return;
+                }
+
+                this.showToast = true;
+                this.type = flash.type ?? 'info';
+                this.message = flash.message ?? flash.content ?? '';
+                setTimeout(() => this.showToast = false, 5000);
+            }
+        }"
+        x-init="init()"
         x-show="showToast"
         x-on:notify.window="
             showToast = true;
             type = $event.detail.type;
-            message = $event.detail.message;
+            message = $event.detail.message ?? $event.detail.content ?? '';
             setTimeout(() => showToast = false, 5000);"
         x-transition:enter="transition transform ease-out duration-300"
         x-transition:enter-start="translate-x-full"
@@ -42,5 +59,4 @@
         </button>
     </div>
 </div>
-
 

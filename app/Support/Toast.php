@@ -30,6 +30,7 @@ final class Toast
     {
 
         Session::flash('notify', [
+            'message' => $content,
             'content' => $content,
             'type' => $type
         ]);

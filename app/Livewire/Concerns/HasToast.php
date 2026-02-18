@@ -44,7 +44,7 @@ trait HasToast
     {
         $this->dispatch(
             'notify',
-            content: $content,
+            message: $content,
             type: $type
         );
     }
