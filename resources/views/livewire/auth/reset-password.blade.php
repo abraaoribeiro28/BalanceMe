@@ -1,44 +1,41 @@
-<div class="mx-auto mt-24 max-w-xl">
-    <x-ui.fieldset label="Reset your password">
-        <form wire:submit="resetPassword" x-data="form">
-            <x-ui.field required>
-                <x-ui.label>email address</x-ui.label>
-                <x-ui.input 
-                    wire:model.blur="email"
-                    type="email"
-                    placeholder="Enter your email address"
-                />
-                <x-ui.error name="email" />
-            </x-ui.field>
+<div class="flex flex-col gap-6">
+    <div class="flex w-full flex-col text-center">
+        <flux:heading size="xl">Reset your password</flux:heading>
+        <flux:subheading>Set a new password for your account.</flux:subheading>
+    </div>
 
-            <x-ui.field required>
-                <x-ui.label>password</x-ui.label>
-                <x-ui.input 
-                    wire:model.blur="password"
-                    type="password"
-                    revealable
-                    placeholder="Enter your new password"
-                />
-                <x-ui.error name="password" />
-            </x-ui.field>
+    <form wire:submit="resetPassword" class="flex flex-col gap-6">
+        <flux:input
+            wire:model.blur="email"
+            label="Email address"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="email@exemplo.com"
+        />
 
-            <x-ui.field required>
-                <x-ui.label>password confirmation</x-ui.label>
-                <x-ui.input 
-                    wire:model.blur="password_confirmation"
-                    type="password"
-                    revealable
-                    placeholder="Confirm your new password"
-                />
-                <x-ui.error name="password_confirmation" />
-            </x-ui.field>
-            
-            <x-ui.button 
-                class="w-full mt-4"
-                type="submit"
-            >
-                Reset
-            </x-ui.button>
-        </form>
-    </x-ui.fieldset>
+        <flux:input
+            wire:model.blur="password"
+            label="Password"
+            type="password"
+            required
+            autocomplete="new-password"
+            placeholder="Enter your new password"
+            viewable
+        />
+
+        <flux:input
+            wire:model.blur="password_confirmation"
+            label="Password confirmation"
+            type="password"
+            required
+            autocomplete="new-password"
+            placeholder="Confirm your new password"
+            viewable
+        />
+
+        <flux:button class="w-full" variant="primary" type="submit">
+            Reset
+        </flux:button>
+    </form>
 </div>

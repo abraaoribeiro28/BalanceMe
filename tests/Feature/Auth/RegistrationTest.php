@@ -87,8 +87,7 @@ test(' new users can\'t register with existing email address ', function () {
         ->set('form.password_confirmation', 'password')
         ->call('register')
         ->call('register')
-        ->assertHasErrors()
-        ->assertSee('The email has already been taken.')
+        ->assertHasErrors(['form.email'])
         ->assertNoRedirect();
     Mail::fake();
     Mail::assertNothingSent();

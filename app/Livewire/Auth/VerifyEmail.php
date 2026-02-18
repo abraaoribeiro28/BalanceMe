@@ -7,8 +7,10 @@ namespace App\Livewire\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.auth')]
 final class VerifyEmail extends Component
 {
     public function sendVerification(): void

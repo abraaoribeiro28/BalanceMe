@@ -1,22 +1,22 @@
+<div class="flex flex-col gap-6">
+    <div class="flex w-full flex-col text-center">
+        <flux:heading size="xl">Confirm your password</flux:heading>
+        <flux:subheading>This is a secure area. Please confirm your password to continue.</flux:subheading>
+    </div>
 
-<div class="mx-auto mt-24 max-w-xl">
-    <x-ui.fieldset>
-        <form wire:submit="confirmPasswordm">
-            <x-ui.field>
-                <x-ui.label>password</x-ui.label>
-                <x-ui.input
-                    wire:model.blur="form.password"
-                    type='password'
-                    revealable
-                />
-                <x-ui.error name="password" />
-            </x-ui.field>
-            <x-ui.button 
-                class="mt-4 flex w-full rounded-xl bg-blue-500 px-4 py-2 text-white" 
-                type="submit"
-            >
-                save
-            </x-ui.button>
-        </form>
-    </x-ui.fieldset>
+    <form wire:submit="confirmPassword" class="flex flex-col gap-6">
+        <flux:input
+            wire:model.blur="password"
+            label="Password"
+            type="password"
+            required
+            autocomplete="current-password"
+            placeholder="Password"
+            viewable
+        />
+
+        <flux:button variant="primary" type="submit" class="w-full">
+            Confirm password
+        </flux:button>
+    </form>
 </div>

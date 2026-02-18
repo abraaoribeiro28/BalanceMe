@@ -2,33 +2,36 @@
     Forgot Password
 </x-slot>
 
-@if (session('status'))
-    <div class="rounded border border-gray-700 bg-slate-900 p-4">
-        <h2 class="mb-4 text-center text-lg font-bold">Reset your password</h2>
-        <p class="rounded bg-emerald-400/20 p-3 text-center">An email has been sent to your mailbox.</p>
+<div class="flex flex-col gap-6">
+    <div class="flex w-full flex-col text-center">
+        <flux:heading size="xl">Reset your password</flux:heading>
+        <flux:subheading>Enter your email address and we will send a reset link.</flux:subheading>
     </div>
-@else
-    <form wire:submit="sendPasswordResetLink"
-          class="mx-auto flex w-full max-w-md flex-col gap-y-4">
-        <div class="flex flex-col gap-y-1">
-            <x-ui.field required>
-                <x-ui.label>email address</x-ui.label>
-                <x-ui.input 
-                    wire:model.blur="email" 
-                />
-                <x-ui.error name="email" />
-            </x-ui.field>
+
+    @if (session('status'))
+        <div class="rounded-md border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-emerald-700 dark:text-emerald-300">
+            An email has been sent to your mailbox.
         </div>
+    @endif
 
-        {{-- Action button --}}
-        <x-ui.button 
-            class="w-full"
-            type="submit"
-        >
+    <form wire:submit="sendPasswordResetLink" class="flex flex-col gap-6">
+        <flux:input
+            wire:model.blur="email"
+            label="Email address"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="email@exemplo.com"
+        />
+
+        <flux:button variant="primary" type="submit" class="w-full">
             Send link to email
-        </x-ui.button>
-
-        <a class="text-base-200 text-sm underline"
-           href="{{ route('login') }}">Return to login? <span class="font-bold">Log in</span></a>
+        </flux:button>
     </form>
-@endif
+
+    <div class="text-center text-sm text-zinc-600 dark:text-zinc-400">
+        <flux:link :href="route('login')" wire:navigate>
+            Return to login? <span class="font-semibold">Log in</span>
+        </flux:link>
+    </div>
+</div>

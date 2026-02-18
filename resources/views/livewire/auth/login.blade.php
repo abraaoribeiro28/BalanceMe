@@ -34,8 +34,8 @@
                 viewable
             />
 
-            @if (Route::has('password.request'))
-                <flux:link class="absolute end-0 top-0 text-sm" :href="route('password.request')" wire:navigate>
+            @if (Route::has('forgot-password'))
+                <flux:link class="absolute end-0 top-0 text-sm" :href="route('forgot-password')" wire:navigate>
                     {{ __('Forgot your password?') }}
                 </flux:link>
             @endif
