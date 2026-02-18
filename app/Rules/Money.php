@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Support\MoneyParser;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
@@ -15,17 +16,15 @@ class Money implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $clean = str_replace(array('R$', '.', ' ', ','), array('', '', '', '.'), $value);
+        $amount = MoneyParser::toFloat($value);
 
-        if (!is_numeric($clean)) {
-            $fail("O campo valor não é um valor monetário válido.");
+        if ($amount === null) {
+            $fail('O campo valor nao e um valor monetario valido.');
             return;
         }
 
-        $amount = (float) $clean;
-
         if ($amount <= 0) {
-            $fail("O valor do campo valor deve ser maior que R$ 0,00.");
+            $fail('O valor do campo valor deve ser maior que R$ 0,00.');
         }
     }
 }

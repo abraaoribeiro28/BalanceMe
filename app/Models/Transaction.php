@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Support\MoneyParser;
 use Illuminate\Database\Eloquent\Model;
 use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use InvalidArgumentException;
 
 class Transaction extends Model
 {
@@ -63,11 +65,14 @@ class Transaction extends Model
      * @param  string $value
      * @return void
      */
-    public function setAmountAttribute(string $value): void
+    public function setAmountAttribute(mixed $value): void
     {
-        $clean = preg_replace('/[^\d,.-]/', '', $value);
-        $clean = str_replace(['.', ','], ['', '.'], $clean);
+        $parsed = MoneyParser::toDecimal($value);
 
-        $this->attributes['amount'] = number_format((float) $clean, 2, '.', '');
+        if ($parsed === null) {
+            throw new InvalidArgumentException('Invalid money amount.');
+        }
+
+        $this->attributes['amount'] = $parsed;
     }
 }
