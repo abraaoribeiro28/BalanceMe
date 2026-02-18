@@ -2,20 +2,166 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Transaction;
+use Flux\Flux;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
+use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
-use Livewire\Attributes\On;
+use Throwable;
 
 class Transactions extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
+    public ?int $transactionToDeleteId = null;
+    public string $transactionToDeleteName = '';
+
     #[On('transaction-saved')]
     public function refreshList(): void
     {
         $this->resetPage();
+    }
+
+    public function editTransaction(int $transactionId): void
+    {
+        $transaction = Transaction::query()->find($transactionId);
+
+        if ($transaction === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Transação não encontrada.'
+            );
+
+            return;
+        }
+
+        if (Gate::denies('update', $transaction)) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Você não tem permissão para editar esta transação.'
+            );
+
+            return;
+        }
+
+        $this->dispatch('edit-transaction', transactionId: $transaction->id);
+    }
+
+    public function confirmDeleteTransaction(int $transactionId): void
+    {
+        $transaction = Transaction::query()->find($transactionId);
+
+        if ($transaction === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Transação não encontrada.'
+            );
+
+            return;
+        }
+
+        if (Gate::denies('delete', $transaction)) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Você não tem permissão para remover esta transação.'
+            );
+
+            return;
+        }
+
+        $this->transactionToDeleteId = $transaction->id;
+        $this->transactionToDeleteName = $transaction->name;
+
+        Flux::modal('confirm-delete-transaction')->show();
+    }
+
+    public function closeDeleteTransactionModal(): void
+    {
+        $this->resetDeleteTransactionState();
+        Flux::modal('confirm-delete-transaction')->close();
+    }
+
+    public function resetDeleteTransactionState(): void
+    {
+        $this->transactionToDeleteId = null;
+        $this->transactionToDeleteName = '';
+    }
+
+    public function deleteTransactionConfirmed(): void
+    {
+        if ($this->transactionToDeleteId === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Nenhuma transação selecionada para exclusão.'
+            );
+
+            return;
+        }
+
+        if ($this->removeTransactionById($this->transactionToDeleteId)) {
+            $this->closeDeleteTransactionModal();
+        }
+    }
+
+    public function deleteTransaction(int $transactionId): void
+    {
+        $this->removeTransactionById($transactionId);
+    }
+
+    private function removeTransactionById(int $transactionId): bool
+    {
+        $transaction = Transaction::query()->find($transactionId);
+
+        if ($transaction === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Transação não encontrada.'
+            );
+
+            return false;
+        }
+
+        if (Gate::denies('delete', $transaction)) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Você não tem permissão para remover esta transação.'
+            );
+
+            return false;
+        }
+
+        try {
+            $transaction->delete();
+
+            $this->dispatch(
+                'notify',
+                type: 'success',
+                message: 'Transação removida com sucesso!'
+            );
+            $this->dispatch('transaction-saved');
+        } catch (Throwable $exception) {
+            Log::error('Ocorreu erro ao remover transação: ' . $exception->getMessage());
+
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Ocorreu um erro ao remover a transação.'
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     public function render()

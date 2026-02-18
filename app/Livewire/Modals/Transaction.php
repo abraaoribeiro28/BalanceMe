@@ -3,26 +3,27 @@
 namespace App\Livewire\Modals;
 
 use App\Models\Card;
+use App\Models\Category;
+use App\Models\Transaction as TransactionModel;
 use App\Rules\Money;
 use Flux\Flux;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Livewire\Component;
-use App\Models\Category;
 use Livewire\Attributes\On;
-use App\Models\Transaction as TransactionModel;
+use Livewire\Component;
 use Throwable;
 
 class Transaction extends Component
 {
-    public string $name;
-    public string $amount;
-    public string $type;
+    public string $name = '';
+    public string $amount = '';
+    public string $type = '';
     public int|string $category_id = '';
     public $card_id = '';
-    public $date;
-    public string $description;
+    public string $date = '';
+    public string $description = '';
 
     public array $cards;
     public array $categories;
@@ -75,6 +76,44 @@ class Transaction extends Component
             ->toArray();
     }
 
+    #[On('edit-transaction')]
+    public function openForEdit(int $transactionId): void
+    {
+        $transaction = TransactionModel::query()->find($transactionId);
+
+        if ($transaction === null) {
+            $this->dispatch(
+                event: 'notify',
+                type: 'error',
+                message: 'Transação não encontrada.'
+            );
+
+            return;
+        }
+
+        if (Gate::denies('update', $transaction)) {
+            $this->dispatch(
+                event: 'notify',
+                type: 'error',
+                message: 'Você não tem permissão para editar esta transação.'
+            );
+
+            return;
+        }
+
+        $this->transaction = $transaction;
+        $this->name = $transaction->name;
+        $this->amount = 'R$ ' . number_format((float) $transaction->amount, 2, ',', '.');
+        $this->type = $transaction->type;
+        $this->category_id = $transaction->category_id;
+        $this->card_id = $transaction->card_id ?? '';
+        $this->date = $transaction->date?->format('Y-m-d') ?? '';
+        $this->description = (string) ($transaction->description ?? '');
+        $this->resetValidation();
+
+        Flux::modal('edit-profile')->show();
+    }
+
     /**
      * Validate and persist the transaction.
      *
@@ -87,17 +126,11 @@ class Transaction extends Component
     {
         $validated = $this->validate();
         $userId = auth()->id();
-        $validated['user_id'] = $userId;
         $validated['card_id'] = $validated['card_id'] === '' ? null : $validated['card_id'];
 
         try {
             if ($this->transaction !== null) {
-                $transaction = TransactionModel::query()
-                    ->whereKey($this->transaction->id)
-                    ->where('user_id', $userId)
-                    ->first();
-
-                if ($transaction === null) {
+                if (Gate::denies('update', $this->transaction)) {
                     $this->dispatch(
                         event: 'notify',
                         type: 'error',
@@ -106,11 +139,24 @@ class Transaction extends Component
 
                     return;
                 }
+
+                $transaction = $this->transaction;
             } else {
+                if (Gate::denies('create', TransactionModel::class)) {
+                    $this->dispatch(
+                        event: 'notify',
+                        type: 'error',
+                        message: 'Você não tem permissão para criar transações.'
+                    );
+
+                    return;
+                }
+
                 $transaction = new TransactionModel();
             }
 
             $transaction->fill($validated);
+            $transaction->user_id = $userId;
             $transaction->save();
 
             $this->dispatch('transaction-saved');

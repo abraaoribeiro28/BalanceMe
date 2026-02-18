@@ -1,8 +1,10 @@
 <flux:modal name="modal-category" class="w-[90%] max-w-100" @close="resetForm" :dismissible="false">
     <div class="space-y-6">
         <div>
-            <flux:heading size="lg">Nova Categoria</flux:heading>
-            <flux:text class="mt-2">Preencha os detalhes da nova categoria abaixo.</flux:text>
+            <flux:heading size="lg">{{ $category ? 'Editar Categoria' : 'Nova Categoria' }}</flux:heading>
+            <flux:text class="mt-2">
+                {{ $category ? 'Atualize os dados da categoria abaixo.' : 'Preencha os detalhes da nova categoria abaixo.' }}
+            </flux:text>
         </div>
 
         <div class="space-y-4">
@@ -25,11 +27,9 @@
 
         <div class="flex">
             <flux:spacer />
-            <flux:button wire:click="save" variant="primary" class="cursor-pointer"
-                         wire:target="save, name, type">
-                Salvar
+            <flux:button wire:click="save" variant="primary" class="cursor-pointer" wire:target="save, name, type">
+                {{ $category ? 'Atualizar' : 'Salvar' }}
             </flux:button>
         </div>
     </div>
 </flux:modal>
-

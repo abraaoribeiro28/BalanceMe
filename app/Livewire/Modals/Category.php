@@ -4,9 +4,11 @@ namespace App\Livewire\Modals;
 
 use App\Models\Category as CategoryModel;
 use Flux\Flux;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
@@ -41,6 +43,41 @@ class Category extends Component
         ];
     }
 
+    #[On('edit-category')]
+    public function openForEdit(int $categoryId): void
+    {
+        $category = CategoryModel::query()->find($categoryId);
+
+        if ($category === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Categoria não encontrada.',
+                duration: 4000
+            );
+
+            return;
+        }
+
+        if (Gate::denies('update', $category)) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Você não tem permissão para editar esta categoria.',
+                duration: 4000
+            );
+
+            return;
+        }
+
+        $this->category = $category;
+        $this->name = $category->name;
+        $this->type = $category->type;
+        $this->resetValidation();
+
+        Flux::modal('modal-category')->show();
+    }
+
     /**
      * Validate and persist the category.
      *
@@ -56,12 +93,7 @@ class Category extends Component
 
         try {
             if ($this->category !== null) {
-                $category = CategoryModel::query()
-                    ->whereKey($this->category->id)
-                    ->where('user_id', $userId)
-                    ->first();
-
-                if ($category === null) {
+                if (Gate::denies('update', $this->category)) {
                     $this->dispatch(
                         'notify',
                         type: 'error',
@@ -71,7 +103,20 @@ class Category extends Component
 
                     return;
                 }
+
+                $category = $this->category;
             } else {
+                if (Gate::denies('create', CategoryModel::class)) {
+                    $this->dispatch(
+                        'notify',
+                        type: 'error',
+                        message: 'Você não tem permissão para criar categorias.',
+                        duration: 4000
+                    );
+
+                    return;
+                }
+
                 $category = new CategoryModel();
             }
 

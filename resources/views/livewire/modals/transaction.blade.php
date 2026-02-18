@@ -1,8 +1,10 @@
-<flux:modal name="edit-profile" class="w-[90%] max-w-100" :dismissible="false">
+<flux:modal name="edit-profile" class="w-[90%] max-w-100" :dismissible="false" @close="resetForm">
     <div class="space-y-6">
         <div>
-            <flux:heading size="lg">Nova Transação</flux:heading>
-            <flux:text class="mt-2">Preencha os detalhes da nova transação abaixo.</flux:text>
+            <flux:heading size="lg">{{ $transaction ? 'Editar Transação' : 'Nova Transação' }}</flux:heading>
+            <flux:text class="mt-2">
+                {{ $transaction ? 'Atualize os dados da transação abaixo.' : 'Preencha os detalhes da nova transação abaixo.' }}
+            </flux:text>
         </div>
 
         <div class="space-y-4">
@@ -40,7 +42,7 @@
                 <flux:label>Categoria</flux:label>
                 <flux:select wire:model.live.debounce.500ms="category_id" placeholder="Selecione uma categoria...">
                     @foreach($categories as $id => $name)
-                        <flux:select.option value="{{$id}}">{{ $name }}</flux:select.option>
+                        <flux:select.option value="{{ $id }}">{{ $name }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:error name="category_id" />
@@ -50,7 +52,7 @@
                 <flux:label badge="Opcional">Cartão de crédito</flux:label>
                 <flux:select wire:model.live.debounce.500ms="card_id" placeholder="Selecione um cartão...">
                     @foreach($cards as $id => $name)
-                        <flux:select.option value="{{$id}}">{{ $name }}</flux:select.option>
+                        <flux:select.option value="{{ $id }}">{{ $name }}</flux:select.option>
                     @endforeach
                 </flux:select>
                 <flux:error name="card_id" />
@@ -72,10 +74,9 @@
         <div class="flex">
             <flux:spacer />
             <flux:button wire:click="save" variant="primary" class="cursor-pointer"
-                 wire:target="save, name, amount, type, category_id, card_id, date, description">
-                Salvar
+                wire:target="save, name, amount, type, category_id, card_id, date, description">
+                {{ $transaction ? 'Atualizar' : 'Salvar' }}
             </flux:button>
         </div>
     </div>
 </flux:modal>
-

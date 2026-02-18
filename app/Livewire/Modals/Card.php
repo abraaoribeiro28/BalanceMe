@@ -4,15 +4,17 @@ namespace App\Livewire\Modals;
 
 use App\Models\Card as CardModel;
 use Flux\Flux;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
 class Card extends Component
 {
-    public string $name;
+    public string $name = '';
 
     public CardModel|null $card = null;
 
@@ -39,6 +41,40 @@ class Card extends Component
         ];
     }
 
+    #[On('edit-card')]
+    public function openForEdit(int $cardId): void
+    {
+        $card = CardModel::query()->find($cardId);
+
+        if ($card === null) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Cartão não encontrado.',
+                duration: 4000
+            );
+
+            return;
+        }
+
+        if (Gate::denies('update', $card)) {
+            $this->dispatch(
+                'notify',
+                type: 'error',
+                message: 'Você não tem permissão para editar este cartão.',
+                duration: 4000
+            );
+
+            return;
+        }
+
+        $this->card = $card;
+        $this->name = $card->name;
+        $this->resetValidation();
+
+        Flux::modal('modal-cards')->show();
+    }
+
     /**
      * Validate and persist the card.
      *
@@ -54,12 +90,7 @@ class Card extends Component
 
         try {
             if ($this->card !== null) {
-                $card = CardModel::query()
-                    ->whereKey($this->card->id)
-                    ->where('user_id', $userId)
-                    ->first();
-
-                if ($card === null) {
+                if (Gate::denies('update', $this->card)) {
                     $this->dispatch(
                         'notify',
                         type: 'error',
@@ -69,7 +100,20 @@ class Card extends Component
 
                     return;
                 }
+
+                $card = $this->card;
             } else {
+                if (Gate::denies('create', CardModel::class)) {
+                    $this->dispatch(
+                        'notify',
+                        type: 'error',
+                        message: 'Você não tem permissão para criar cartões.',
+                        duration: 4000
+                    );
+
+                    return;
+                }
+
                 $card = new CardModel();
             }
 
