@@ -6,6 +6,7 @@ use App\Models\Card;
 use App\Rules\Money;
 use Flux\Flux;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use App\Models\Category;
@@ -34,14 +35,26 @@ class Transaction extends Component
      */
     public function rules(): array
     {
+        $userId = auth()->id();
+
         return [
-            'name' => 'required|string|min:3|max:50',
-            'amount' => new Money(),
-            'type' => 'required|string|min:3|max:50',
-            'category_id' => 'required|exists:categories,id',
-            'card_id' => 'nullable|exists:cards,id',
-            'date' => 'required|date',
-            'description' => 'nullable|string|min:3|max:255',
+            'name' => ['required', 'string', 'min:3', 'max:50'],
+            'amount' => [new Money()],
+            'type' => ['required', Rule::in(['Receita', 'Despesa'])],
+            'category_id' => [
+                'required',
+                Rule::exists('categories', 'id')->where(
+                    fn ($query) => $query->where('user_id', $userId)
+                ),
+            ],
+            'card_id' => [
+                'nullable',
+                Rule::exists('cards', 'id')->where(
+                    fn ($query) => $query->where('user_id', $userId)
+                ),
+            ],
+            'date' => ['required', 'date'],
+            'description' => ['nullable', 'string', 'min:3', 'max:255'],
         ];
     }
 
@@ -73,14 +86,32 @@ class Transaction extends Component
     public function save(): void
     {
         $validated = $this->validate();
-        $validated['user_id'] = auth()->id();
+        $userId = auth()->id();
+        $validated['user_id'] = $userId;
         $validated['card_id'] = $validated['card_id'] === '' ? null : $validated['card_id'];
 
         try {
-            TransactionModel::updateOrCreate(
-                ['id' => $this->transaction?->id],
-                $validated
-            );
+            if ($this->transaction !== null) {
+                $transaction = TransactionModel::query()
+                    ->whereKey($this->transaction->id)
+                    ->where('user_id', $userId)
+                    ->first();
+
+                if ($transaction === null) {
+                    $this->dispatch(
+                        event: 'notify',
+                        type: 'error',
+                        message: 'Você não tem permissão para editar esta transação.'
+                    );
+
+                    return;
+                }
+            } else {
+                $transaction = new TransactionModel();
+            }
+
+            $transaction->fill($validated);
+            $transaction->save();
 
             $this->dispatch('transaction-saved');
 

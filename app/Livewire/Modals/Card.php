@@ -5,8 +5,8 @@ namespace App\Livewire\Modals;
 use App\Models\Card as CardModel;
 use Flux\Flux;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
@@ -23,8 +23,19 @@ class Card extends Component
      */
     public function rules(): array
     {
+        $userId = auth()->id();
+        $cardId = $this->card?->id;
+
         return [
-            'name' => 'required|string|min:3|max:50',
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                Rule::unique('cards', 'name')
+                    ->where(fn ($query) => $query->where('user_id', $userId))
+                    ->ignore($cardId),
+            ],
         ];
     }
 
@@ -39,13 +50,32 @@ class Card extends Component
     public function save(): void
     {
         $validated = $this->validate();
-        $validated['user_id'] = auth()->id();
+        $userId = auth()->id();
 
         try {
-            CardModel::updateOrCreate(
-                ['id' => $this->card?->id],
-                $validated
-            );
+            if ($this->card !== null) {
+                $card = CardModel::query()
+                    ->whereKey($this->card->id)
+                    ->where('user_id', $userId)
+                    ->first();
+
+                if ($card === null) {
+                    $this->dispatch(
+                        'notify',
+                        type: 'error',
+                        message: 'Você não tem permissão para editar este cartão.',
+                        duration: 4000
+                    );
+
+                    return;
+                }
+            } else {
+                $card = new CardModel();
+            }
+
+            $card->fill($validated);
+            $card->user_id = $userId;
+            $card->save();
 
             $this->dispatch('notify',
                 type: 'success',
@@ -77,4 +107,3 @@ class Card extends Component
         $this->resetValidation();
     }
 }
-
