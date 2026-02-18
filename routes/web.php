@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Livewire\Home::class)->name('home');
 
-Route::get('/logar', function () {
-    \Illuminate\Support\Facades\Auth::loginUsingId(1);
-});
-
 /** AUTH ROUTES */
 Route::get('/register', Register::class)->name('register');
 
