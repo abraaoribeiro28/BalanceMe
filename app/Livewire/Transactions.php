@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Transaction;
 use Flux\Flux;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -29,27 +28,17 @@ class Transactions extends Component
     }
 
     /**
-     * Dispatch the edit event for an authorized transaction.
+     * Dispatch the edit event for an owned transaction.
      */
     public function editTransaction(int $transactionId): void
     {
-        $transaction = Transaction::query()->find($transactionId);
+        $transaction = $this->findOwnedTransaction($transactionId);
 
         if ($transaction === null) {
             $this->dispatch(
                 'notify',
                 type: 'error',
                 message: 'Transação não encontrada.'
-            );
-
-            return;
-        }
-
-        if (Gate::denies('update', $transaction)) {
-            $this->dispatch(
-                'notify',
-                type: 'error',
-                message: 'Você não tem permissão para editar esta transação.'
             );
 
             return;
@@ -59,27 +48,17 @@ class Transactions extends Component
     }
 
     /**
-     * Open the delete confirmation modal for an authorized transaction.
+     * Open the delete confirmation modal for an owned transaction.
      */
     public function confirmDeleteTransaction(int $transactionId): void
     {
-        $transaction = Transaction::query()->find($transactionId);
+        $transaction = $this->findOwnedTransaction($transactionId);
 
         if ($transaction === null) {
             $this->dispatch(
                 'notify',
                 type: 'error',
                 message: 'Transação não encontrada.'
-            );
-
-            return;
-        }
-
-        if (Gate::denies('delete', $transaction)) {
-            $this->dispatch(
-                'notify',
-                type: 'error',
-                message: 'Você não tem permissão para remover esta transação.'
             );
 
             return;
@@ -138,27 +117,17 @@ class Transactions extends Component
     }
 
     /**
-     * Remove a transaction after existence and authorization checks.
+     * Remove a transaction after existence and ownership checks.
      */
     private function removeTransactionById(int $transactionId): bool
     {
-        $transaction = Transaction::query()->find($transactionId);
+        $transaction = $this->findOwnedTransaction($transactionId);
 
         if ($transaction === null) {
             $this->dispatch(
                 'notify',
                 type: 'error',
                 message: 'Transação não encontrada.'
-            );
-
-            return false;
-        }
-
-        if (Gate::denies('delete', $transaction)) {
-            $this->dispatch(
-                'notify',
-                type: 'error',
-                message: 'Você não tem permissão para remover esta transação.'
             );
 
             return false;
@@ -186,6 +155,16 @@ class Transactions extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Find a transaction that belongs to the authenticated user.
+     */
+    private function findOwnedTransaction(int $transactionId): ?Transaction
+    {
+        return Transaction::query()
+            ->where('user_id', auth()->id())
+            ->find($transactionId);
     }
 
     /**

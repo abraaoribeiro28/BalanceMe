@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\Category;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -35,26 +34,17 @@ class Categories extends Component
     }
 
     /**
-     * Dispatch the edit event for an authorized category.
+     * Dispatch the edit event for an owned category.
      */
     public function editCategory(int $categoryId): void
     {
-        $category = Category::query()->find($categoryId);
+        $category = $this->findOwnedCategory($categoryId);
 
         if ($category === null) {
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'error',
                 message: 'Categoria não encontrada.',
-                duration: 4000
-            );
-
-            return;
-        }
-
-        if (Gate::denies('update', $category)) {
-            $this->dispatch('notify',
-                type: 'error',
-                message: 'Você não tem permissão para editar esta categoria.',
                 duration: 4000
             );
 
@@ -65,26 +55,17 @@ class Categories extends Component
     }
 
     /**
-     * Open the delete confirmation modal for an authorized category.
+     * Open the delete confirmation modal for an owned category.
      */
     public function confirmDeleteCategory(int $categoryId): void
     {
-        $category = Category::query()->find($categoryId);
+        $category = $this->findOwnedCategory($categoryId);
 
         if ($category === null) {
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'error',
                 message: 'Categoria não encontrada.',
-                duration: 4000
-            );
-
-            return;
-        }
-
-        if (Gate::denies('delete', $category)) {
-            $this->dispatch('notify',
-                type: 'error',
-                message: 'Você não tem permissão para remover esta categoria.',
                 duration: 4000
             );
 
@@ -121,7 +102,8 @@ class Categories extends Component
     public function deleteCategoryConfirmed(): void
     {
         if ($this->categoryToDeleteId === null) {
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'error',
                 message: 'Nenhuma categoria selecionada para exclusão.',
                 duration: 4000
@@ -144,26 +126,17 @@ class Categories extends Component
     }
 
     /**
-     * Remove a category after existence and authorization checks.
+     * Remove a category after existence and ownership checks.
      */
     private function removeCategoryById(int $categoryId): bool
     {
-        $category = Category::query()->find($categoryId);
+        $category = $this->findOwnedCategory($categoryId);
 
         if ($category === null) {
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'error',
                 message: 'Categoria não encontrada.',
-                duration: 4000
-            );
-
-            return false;
-        }
-
-        if (Gate::denies('delete', $category)) {
-            $this->dispatch('notify',
-                type: 'error',
-                message: 'Você não tem permissão para remover esta categoria.',
                 duration: 4000
             );
 
@@ -173,7 +146,8 @@ class Categories extends Component
         try {
             $category->delete();
 
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'success',
                 message: 'Categoria removida com sucesso!',
                 duration: 4000
@@ -183,7 +157,8 @@ class Categories extends Component
             $this->dispatch('transaction-saved');
         } catch (Throwable $exception) {
             Log::error('Ocorreu erro ao remover categoria: ' . $exception->getMessage());
-            $this->dispatch('notify',
+            $this->dispatch(
+                'notify',
                 type: 'error',
                 message: 'Ocorreu um erro ao remover a categoria.',
                 duration: 4000
@@ -193,5 +168,15 @@ class Categories extends Component
         }
 
         return true;
+    }
+
+    /**
+     * Find a category that belongs to the authenticated user.
+     */
+    private function findOwnedCategory(int $categoryId): ?Category
+    {
+        return Category::query()
+            ->where('user_id', auth()->id())
+            ->find($categoryId);
     }
 }
