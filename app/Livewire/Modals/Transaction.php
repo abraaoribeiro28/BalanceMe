@@ -111,7 +111,7 @@ class Transaction extends Component
         $this->description = (string) ($transaction->description ?? '');
         $this->resetValidation();
 
-        Flux::modal('edit-profile')->show();
+        Flux::modal('modal-transaction')->show();
     }
 
     /**
@@ -167,7 +167,7 @@ class Transaction extends Component
                 message: 'Transação salva com sucesso!'
             );
 
-            Flux::modals()->close();
+            Flux::modal('modal-transaction')->close();
         } catch (Throwable $exception) {
             Log::error('Ocorreu erro ao registrar transação: ' . $exception->getMessage());
 
@@ -178,7 +178,7 @@ class Transaction extends Component
             );
         }
 
-        $this->dispatch('close-modal', id: 'modal-transaction');
+        $this->resetForm();
     }
 
     /**
@@ -186,7 +186,6 @@ class Transaction extends Component
      *
      * @return void
      */
-    #[On('close-modal')]
     public function resetForm(): void
     {
         $this->resetExcept('cards', 'categories');

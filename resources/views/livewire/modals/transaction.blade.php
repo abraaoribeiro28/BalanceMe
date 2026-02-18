@@ -1,4 +1,4 @@
-<flux:modal name="edit-profile" class="w-[90%] max-w-100" :dismissible="false" @close="resetForm">
+<flux:modal name="modal-transaction" class="w-[90%] max-w-100" :dismissible="false" @close="resetForm">
     <div class="space-y-6">
         <div>
             <flux:heading size="lg">{{ $transaction ? 'Editar Transação' : 'Nova Transação' }}</flux:heading>
