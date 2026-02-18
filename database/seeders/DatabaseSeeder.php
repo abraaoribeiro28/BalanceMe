@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Card;
 use App\Models\Category;
-use App\Models\Transaction;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,12 +21,48 @@ class DatabaseSeeder extends Seeder
                 'email' => 'test@example.com',
             ])
             ->each(function (User $user) {
-                $cards = Card::factory()->count(2)->forUser($user)->create();
+                $cards = collect([
+                    ['name' => 'Nubank'],
+                    ['name' => 'Inter'],
+                ])->map(fn (array $card) => Card::create([
+                    'name' => $card['name'],
+                    'user_id' => $user->id,
+                ]));
 
-                $incomeCats  = Category::factory()->count(4)->income()->forUser($user)->create();
-                $expenseCats = Category::factory()->count(8)->expense()->forUser($user)->create();
+                $incomeCats = collect([
+                    ['name' => 'Salário', 'type' => 'Receita'],
+                    ['name' => 'Freelance', 'type' => 'Receita'],
+                    ['name' => 'Rendimentos', 'type' => 'Receita'],
+                    ['name' => 'Investimentos', 'type' => 'Receita'],
+                ])->map(fn (array $category) => Category::create([
+                    'name' => $category['name'],
+                    'type' => $category['type'],
+                    'user_id' => $user->id,
+                ]));
 
-                Category::factory()->count(2)->both()->forUser($user)->create();
+                $expenseCats = collect([
+                    ['name' => 'Alimentação', 'type' => 'Despesa'],
+                    ['name' => 'Transporte', 'type' => 'Despesa'],
+                    ['name' => 'Moradia', 'type' => 'Despesa'],
+                    ['name' => 'Saúde', 'type' => 'Despesa'],
+                    ['name' => 'Educação', 'type' => 'Despesa'],
+                    ['name' => 'Lazer', 'type' => 'Despesa'],
+                    ['name' => 'Assinaturas', 'type' => 'Despesa'],
+                    ['name' => 'Supermercado', 'type' => 'Despesa'],
+                ])->map(fn (array $category) => Category::create([
+                    'name' => $category['name'],
+                    'type' => $category['type'],
+                    'user_id' => $user->id,
+                ]));
+
+                collect([
+                    ['name' => 'Transferência', 'type' => 'Ambos'],
+                    ['name' => 'Ajuste', 'type' => 'Ambos'],
+                ])->each(fn (array $category) => Category::create([
+                    'name' => $category['name'],
+                    'type' => $category['type'],
+                    'user_id' => $user->id,
+                ]));
 
 //                Transaction::factory()
 //                    ->count(100)

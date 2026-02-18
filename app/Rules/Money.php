@@ -19,7 +19,7 @@ class Money implements ValidationRule
         $amount = MoneyParser::toFloat($value);
 
         if ($amount === null) {
-            $fail('O campo valor nao e um valor monetario valido.');
+            $fail('O campo valor não é um valor monetário válido.');
             return;
         }
 
