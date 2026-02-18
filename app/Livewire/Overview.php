@@ -14,16 +14,19 @@ class Overview extends Component
     public array $tsLabels = [];
     public array $tsIncome = [];
     public array $tsExpense = [];
+    public string $timeSeriesChartKey = 'ts-initial';
 
     // Donut por categoria
     public array $catLabels = [];
     public array $catValues = [];
     public array $catColors = [];
+    public string $categoryChartKey = 'cat-initial';
 
     // Donut por cartão
     public array $cardLabels = [];
     public array $cardValues = [];
     public array $cardColors = [];
+    public string $cardChartKey = 'card-initial';
 
     public array $transactions = [];
 
@@ -36,7 +39,7 @@ class Overview extends Component
     }
 
     /**
-     * Recompute data and dispatch a single event to update all charts.
+     * Recompute dashboard datasets and refresh chart keys.
      */
     #[On('transaction-saved')]
     public function refreshDashboardCharts(): void
@@ -45,25 +48,7 @@ class Overview extends Component
         [$this->catLabels, $this->catValues, $this->catColors] = $this->buildCategoryDonut();
         [$this->cardLabels, $this->cardValues, $this->cardColors] = $this->buildCardDonut();
         $this->transactions = $this->loadRecentTransactions();
-
-        $this->dispatch(
-            'dashboard:charts:update',
-            timeseries: [
-                'labels' => $this->tsLabels,
-                'income' => $this->tsIncome,
-                'expense' => $this->tsExpense,
-            ],
-            categories: [
-                'labels' => $this->catLabels,
-                'values' => $this->catValues,
-                'colors' => $this->catColors,
-            ],
-            cards: [
-                'labels' => $this->cardLabels,
-                'values' => $this->cardValues,
-                'colors' => $this->cardColors,
-            ],
-        );
+        $this->refreshChartKeys();
     }
 
     /**
@@ -241,5 +226,31 @@ class Overview extends Component
         $b = (int) round(($b1 + $m) * 255);
 
         return sprintf('#%02x%02x%02x', $r, $g, $b);
+    }
+
+    private function refreshChartKeys(): void
+    {
+        $this->timeSeriesChartKey = 'ts-' . md5($this->toChartHash([
+            $this->tsLabels,
+            $this->tsIncome,
+            $this->tsExpense,
+        ]));
+
+        $this->categoryChartKey = 'cat-' . md5($this->toChartHash([
+            $this->catLabels,
+            $this->catValues,
+            $this->catColors,
+        ]));
+
+        $this->cardChartKey = 'card-' . md5($this->toChartHash([
+            $this->cardLabels,
+            $this->cardValues,
+            $this->cardColors,
+        ]));
+    }
+
+    private function toChartHash(array $payload): string
+    {
+        return json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE) ?: '';
     }
 }

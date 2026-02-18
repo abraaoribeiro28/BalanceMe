@@ -53,38 +53,53 @@ class Dashboard extends Component
         $prevStart = $now->copy()->subMonthNoOverflow()->startOfMonth();
         $prevEnd = $now->copy()->subMonthNoOverflow()->endOfMonth();
 
-        // Totals (all time)
-        $incomeAll = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Receita')
-            ->sum('amount');
-        $expenseAll = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Despesa')
-            ->sum('amount');
+        $aggregates = Transaction::query()
+            ->where('user_id', $userId)
+            ->selectRaw("
+                COALESCE(SUM(CASE WHEN type = 'Receita' THEN amount ELSE 0 END), 0) as income_all,
+                COALESCE(SUM(CASE WHEN type = 'Despesa' THEN amount ELSE 0 END), 0) as expense_all,
+                COALESCE(SUM(CASE
+                    WHEN type = 'Receita' AND date BETWEEN ? AND ? THEN amount
+                    ELSE 0
+                END), 0) as income_current,
+                COALESCE(SUM(CASE
+                    WHEN type = 'Receita' AND date BETWEEN ? AND ? THEN amount
+                    ELSE 0
+                END), 0) as income_prev,
+                COALESCE(SUM(CASE
+                    WHEN type = 'Despesa' AND date BETWEEN ? AND ? THEN amount
+                    ELSE 0
+                END), 0) as expense_current,
+                COALESCE(SUM(CASE
+                    WHEN type = 'Despesa' AND date BETWEEN ? AND ? THEN amount
+                    ELSE 0
+                END), 0) as expense_prev
+            ", [
+                $currentStart->toDateString(),
+                $currentEnd->toDateString(),
+                $prevStart->toDateString(),
+                $prevEnd->toDateString(),
+                $currentStart->toDateString(),
+                $currentEnd->toDateString(),
+                $prevStart->toDateString(),
+                $prevEnd->toDateString(),
+            ])
+            ->first();
+
+        $incomeAll = (float) ($aggregates?->income_all ?? 0);
+        $expenseAll = (float) ($aggregates?->expense_all ?? 0);
+        $incomeCurrent = (float) ($aggregates?->income_current ?? 0);
+        $incomePrev = (float) ($aggregates?->income_prev ?? 0);
+        $expenseCurrent = (float) ($aggregates?->expense_current ?? 0);
+        $expensePrev = (float) ($aggregates?->expense_prev ?? 0);
+
         $balance = $incomeAll - $expenseAll;
-
-        // Current and previous month totals
-        $incomeCurrent = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Receita')
-            ->whereBetween('date', [$currentStart->toDateString(), $currentEnd->toDateString()])
-            ->sum('amount');
-        $incomePrev = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Receita')
-            ->whereBetween('date', [$prevStart->toDateString(), $prevEnd->toDateString()])
-            ->sum('amount');
-
-        $expenseCurrent = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Despesa')
-            ->whereBetween('date', [$currentStart->toDateString(), $currentEnd->toDateString()])
-            ->sum('amount');
-        $expensePrev = (float) Transaction::where('user_id', $userId)
-            ->where('type', 'Despesa')
-            ->whereBetween('date', [$prevStart->toDateString(), $prevEnd->toDateString()])
-            ->sum('amount');
 
         $incomePct = $this->percentChange($incomePrev, $incomeCurrent);
         $expensePct = $this->percentChange($expensePrev, $expenseCurrent);
 
         // Assign formatted strings
+        $this->lastUpdated = $now->format('d/m/Y');
         $this->totalBalance = $this->fmtCurrency($balance);
         $this->incomeTotal = $this->fmtCurrency($incomeCurrent);
         $this->expenseTotal = $this->fmtCurrency($expenseCurrent);

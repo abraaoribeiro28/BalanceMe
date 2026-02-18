@@ -7,6 +7,7 @@
             </div>
             <div class="p-6 pt-0 pl-2">
                 <div
+                    wire:key="{{ $timeSeriesChartKey }}"
                     x-data="window.incomeExpenseChart({
                         labels: @js($tsLabels),
                         income: @js($tsIncome),
@@ -15,7 +16,7 @@
                     x-init="init()"
                     class="w-full h-64 sm:h-72 md:h-80 lg:h-[300px]"
                 >
-                    <canvas id="ie-chart" class="w-full h-[300px]" wire:ignore></canvas>
+                    <canvas x-ref="canvas" class="w-full h-[300px]" wire:ignore></canvas>
                 </div>
             </div>
         </div>
@@ -27,6 +28,7 @@
             <div class="p-6 pt-0">
                 @if(count($catValues))
                     <div
+                        wire:key="{{ $categoryChartKey }}"
                         x-data="window.expenseByCategoryChart({
                             labels: @js($catLabels),
                             values: @js($catValues),
@@ -35,7 +37,7 @@
                         x-init="init()"
                         class="w-full h-64 sm:h-72 md:h-80 lg:h-[300px]"
                     >
-                        <canvas id="cat-chart" class="w-full h-full" wire:ignore></canvas>
+                        <canvas x-ref="canvas" class="w-full h-full" wire:ignore></canvas>
                     </div>
                 @else
                     <div class="flex h-[300px] items-center justify-center">
@@ -81,6 +83,7 @@
             <div class="p-6 pt-0">
                 @if(count($cardValues))
                     <div
+                        wire:key="{{ $cardChartKey }}"
                         x-data="window.expenseByCardChart({
                             labels: @js($cardLabels),
                             values: @js($cardValues),
@@ -89,7 +92,7 @@
                         x-init="init()"
                         class="w-full h-64 sm:h-72 md:h-80 lg:h-[300px]"
                     >
-                        <canvas id="card-chart" class="w-full h-full" wire:ignore></canvas>
+                        <canvas x-ref="canvas" class="w-full h-full" wire:ignore></canvas>
                     </div>
                 @else
                     <div class="flex h-[300px] items-center justify-center">
@@ -111,7 +114,7 @@
             chart: null,
 
             init() {
-                const ctx = document.getElementById('ie-chart').getContext('2d');
+                const ctx = this.$refs.canvas.getContext('2d');
 
                 this.chart = new Chart(ctx, {
                     type: 'bar',
@@ -159,14 +162,6 @@
                     }
                 });
 
-                window.addEventListener('dashboard:charts:update', (e) => {
-                    const { timeseries } = e.detail;
-                    if (!timeseries) return;
-                    this.chart.data.labels = timeseries.labels ?? this.chart.data.labels;
-                    this.chart.data.datasets[0].data = timeseries.income ?? this.chart.data.datasets[0].data;
-                    this.chart.data.datasets[1].data = timeseries.expense ?? this.chart.data.datasets[1].data;
-                    this.chart.update();
-                });
             },
         });
 
@@ -175,7 +170,7 @@
             chart: null,
 
             init() {
-                const ctx = document.getElementById('cat-chart').getContext('2d');
+                const ctx = this.$refs.canvas.getContext('2d');
 
                 this.chart = new Chart(ctx, {
                     type: 'doughnut',
@@ -204,15 +199,6 @@
                     }
                 });
 
-                window.addEventListener('dashboard:charts:update', (e) => {
-                    const { categories } = e.detail;
-                    if (!categories) return;
-                    this.chart.data.labels = categories.labels ?? this.chart.data.labels;
-                    this.chart.data.datasets[0].data = categories.values ?? this.chart.data.datasets[0].data;
-                    this.chart.data.datasets[0].backgroundColor = categories.colors ?? this.chart.data.datasets[0].backgroundColor;
-                    this.chart.data.datasets[0].borderColor = categories.colors ?? this.chart.data.datasets[0].borderColor;
-                    this.chart.update();
-                });
             },
         });
 
@@ -221,7 +207,7 @@
             chart: null,
 
             init() {
-                const ctx = document.getElementById('card-chart').getContext('2d');
+                const ctx = this.$refs.canvas.getContext('2d');
 
                 this.chart = new Chart(ctx, {
                     type: 'doughnut',
@@ -250,15 +236,6 @@
                     }
                 });
 
-                window.addEventListener('dashboard:charts:update', (e) => {
-                    const { cards } = e.detail;
-                    if (!cards) return;
-                    this.chart.data.labels = cards.labels ?? this.chart.data.labels;
-                    this.chart.data.datasets[0].data = cards.values ?? this.chart.data.datasets[0].data;
-                    this.chart.data.datasets[0].backgroundColor = cards.colors ?? this.chart.data.datasets[0].backgroundColor;
-                    this.chart.data.datasets[0].borderColor = cards.colors ?? this.chart.data.datasets[0].borderColor;
-                    this.chart.update();
-                });
             },
         });
     </script>
