@@ -17,17 +17,26 @@ class Cards extends Component
     public ?int $cardToDeleteId = null;
     public string $cardToDeleteName = '';
 
+    /**
+     * Load all cards for the authenticated user.
+     */
     #[On('load-cards')]
     public function loadCards(): void
     {
         $this->cards = Card::where('user_id', auth()->id())->get();
     }
 
+    /**
+     * Initialize the component card collection.
+     */
     public function mount(): void
     {
         $this->loadCards();
     }
 
+    /**
+     * Dispatch the edit event for an authorized card.
+     */
     public function editCard(int $cardId): void
     {
         $card = Card::query()->find($cardId);
@@ -55,6 +64,9 @@ class Cards extends Component
         $this->dispatch('edit-card', cardId: $card->id);
     }
 
+    /**
+     * Open the delete confirmation modal for an authorized card.
+     */
     public function confirmDeleteCard(int $cardId): void
     {
         $card = Card::query()->find($cardId);
@@ -85,18 +97,27 @@ class Cards extends Component
         Flux::modal('confirm-delete-card')->show();
     }
 
+    /**
+     * Close the delete confirmation modal and clear state.
+     */
     public function closeDeleteCardModal(): void
     {
         $this->resetDeleteCardState();
         Flux::modal('confirm-delete-card')->close();
     }
 
+    /**
+     * Clear the pending delete card state.
+     */
     public function resetDeleteCardState(): void
     {
         $this->cardToDeleteId = null;
         $this->cardToDeleteName = '';
     }
 
+    /**
+     * Delete the card selected in the confirmation modal.
+     */
     public function deleteCardConfirmed(): void
     {
         if ($this->cardToDeleteId === null) {
@@ -114,11 +135,17 @@ class Cards extends Component
         }
     }
 
+    /**
+     * Delete a card by its identifier.
+     */
     public function deleteCard(int $cardId): void
     {
         $this->removeCardById($cardId);
     }
 
+    /**
+     * Remove a card after existence and authorization checks.
+     */
     private function removeCardById(int $cardId): bool
     {
         $card = Card::query()->find($cardId);

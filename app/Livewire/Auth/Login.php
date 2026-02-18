@@ -18,6 +18,9 @@ final class Login extends Component
 {
     public LoginForm $form;
 
+    /**
+     * Validate credentials and authenticate the user.
+     */
     public function login()
     {
         $this->validate();
@@ -31,6 +34,9 @@ final class Login extends Component
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
+    /**
+     * Render the login page.
+     */
     public function render()
     {
         /** @var View $view */

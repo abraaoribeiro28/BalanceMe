@@ -19,12 +19,18 @@ class Transactions extends Component
     public ?int $transactionToDeleteId = null;
     public string $transactionToDeleteName = '';
 
+    /**
+     * Reset pagination when transaction data changes.
+     */
     #[On('transaction-saved')]
     public function refreshList(): void
     {
         $this->resetPage();
     }
 
+    /**
+     * Dispatch the edit event for an authorized transaction.
+     */
     public function editTransaction(int $transactionId): void
     {
         $transaction = Transaction::query()->find($transactionId);
@@ -52,6 +58,9 @@ class Transactions extends Component
         $this->dispatch('edit-transaction', transactionId: $transaction->id);
     }
 
+    /**
+     * Open the delete confirmation modal for an authorized transaction.
+     */
     public function confirmDeleteTransaction(int $transactionId): void
     {
         $transaction = Transaction::query()->find($transactionId);
@@ -82,18 +91,27 @@ class Transactions extends Component
         Flux::modal('confirm-delete-transaction')->show();
     }
 
+    /**
+     * Close the delete confirmation modal and clear state.
+     */
     public function closeDeleteTransactionModal(): void
     {
         $this->resetDeleteTransactionState();
         Flux::modal('confirm-delete-transaction')->close();
     }
 
+    /**
+     * Clear the pending delete transaction state.
+     */
     public function resetDeleteTransactionState(): void
     {
         $this->transactionToDeleteId = null;
         $this->transactionToDeleteName = '';
     }
 
+    /**
+     * Delete the transaction selected in the confirmation modal.
+     */
     public function deleteTransactionConfirmed(): void
     {
         if ($this->transactionToDeleteId === null) {
@@ -111,11 +129,17 @@ class Transactions extends Component
         }
     }
 
+    /**
+     * Delete a transaction by its identifier.
+     */
     public function deleteTransaction(int $transactionId): void
     {
         $this->removeTransactionById($transactionId);
     }
 
+    /**
+     * Remove a transaction after existence and authorization checks.
+     */
     private function removeTransactionById(int $transactionId): bool
     {
         $transaction = Transaction::query()->find($transactionId);
@@ -164,6 +188,9 @@ class Transactions extends Component
         return true;
     }
 
+    /**
+     * Render the paginated transaction list.
+     */
     public function render()
     {
         $transactions = Transaction::with('category', 'card')

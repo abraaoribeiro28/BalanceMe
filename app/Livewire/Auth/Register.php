@@ -16,6 +16,9 @@ final class Register extends Component
 {
     public RegisterForm $form;
 
+    /**
+     * Register a new user account.
+     */
     public function register()
     {
         $this->form->register();
@@ -25,6 +28,9 @@ final class Register extends Component
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
+    /**
+     * Render the registration page.
+     */
     public function render()
     {
         /** @var View $view */

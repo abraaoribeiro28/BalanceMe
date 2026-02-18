@@ -27,12 +27,18 @@ final class ResetPassword extends Component
 
     public string $password_confirmation = '';
 
+    /**
+     * Initialize token and email from the reset link.
+     */
     public function mount(string $token): void
     {
         $this->token = $token;
         $this->email = request('email') ?? '';
     }
 
+    /**
+     * Reset the user's password with the provided token.
+     */
     public function resetPassword()
     {
         $this->validate([
@@ -63,6 +69,9 @@ final class ResetPassword extends Component
         $this->redirectRoute('login', navigate: true);
     }
 
+    /**
+     * Render the reset-password page.
+     */
     public function render()
     {
         /** @var View $view */

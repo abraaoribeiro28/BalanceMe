@@ -17,17 +17,26 @@ class Categories extends Component
     public ?int $categoryToDeleteId = null;
     public string $categoryToDeleteName = '';
 
+    /**
+     * Load all categories for the authenticated user.
+     */
     #[On('load-categories')]
     public function loadCategories(): void
     {
         $this->categories = Category::where('user_id', auth()->id())->get();
     }
 
+    /**
+     * Initialize the component category collection.
+     */
     public function mount(): void
     {
         $this->loadCategories();
     }
 
+    /**
+     * Dispatch the edit event for an authorized category.
+     */
     public function editCategory(int $categoryId): void
     {
         $category = Category::query()->find($categoryId);
@@ -55,6 +64,9 @@ class Categories extends Component
         $this->dispatch('edit-category', categoryId: $category->id);
     }
 
+    /**
+     * Open the delete confirmation modal for an authorized category.
+     */
     public function confirmDeleteCategory(int $categoryId): void
     {
         $category = Category::query()->find($categoryId);
@@ -85,18 +97,27 @@ class Categories extends Component
         Flux::modal('confirm-delete-category')->show();
     }
 
+    /**
+     * Close the delete confirmation modal and clear state.
+     */
     public function closeDeleteCategoryModal(): void
     {
         $this->resetDeleteCategoryState();
         Flux::modal('confirm-delete-category')->close();
     }
 
+    /**
+     * Clear the pending delete category state.
+     */
     public function resetDeleteCategoryState(): void
     {
         $this->categoryToDeleteId = null;
         $this->categoryToDeleteName = '';
     }
 
+    /**
+     * Delete the category selected in the confirmation modal.
+     */
     public function deleteCategoryConfirmed(): void
     {
         if ($this->categoryToDeleteId === null) {
@@ -114,11 +135,17 @@ class Categories extends Component
         }
     }
 
+    /**
+     * Delete a category by its identifier.
+     */
     public function deleteCategory(int $categoryId): void
     {
         $this->removeCategoryById($categoryId);
     }
 
+    /**
+     * Remove a category after existence and authorization checks.
+     */
     private function removeCategoryById(int $categoryId): bool
     {
         $category = Category::query()->find($categoryId);

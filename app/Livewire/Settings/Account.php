@@ -8,6 +8,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -31,13 +32,19 @@ class Account extends Component
 
     public string $password_confirmation = '';
 
-    public function mount(#[CurrentUser] User $user)
+    /**
+     * Prefill account form fields for the current user.
+     */
+    public function mount(#[CurrentUser] User $user): void
     {
         $this->name = $user->name;
         $this->email = $user->email;
     }
 
-    public function saveChanges(#[CurrentUser] User $user)
+    /**
+     * Persist profile changes for the current user.
+     */
+    public function saveChanges(#[CurrentUser] User $user): void
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'min:3', 'max:12'],
@@ -95,7 +102,11 @@ class Account extends Component
             message: 'Sua senha foi atualizada.'
         );
     }
-    public function render()
+
+    /**
+     * Render the account settings page.
+     */
+    public function render(): View
     {
         return view('livewire.settings.account');
     }

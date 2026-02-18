@@ -13,6 +13,9 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 final class VerifyEmail extends Component
 {
+    /**
+     * Send the verification email to the current user.
+     */
     public function sendVerification(): void
     {
         /** @var User $authUser */
@@ -29,6 +32,9 @@ final class VerifyEmail extends Component
         Session::flash('status', 'verification-link-sent');
     }
 
+    /**
+     * Render the verify-email page.
+     */
     public function render()
     {
         /** @var View $view */

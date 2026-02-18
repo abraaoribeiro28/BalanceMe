@@ -31,8 +31,6 @@ class Transaction extends Component
 
     /**
      * Get the validation rules for the transaction form.
-     *
-     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -62,8 +60,6 @@ class Transaction extends Component
     /**
      * Loads the user's cards and categories into local arrays
      * to populate selection fields in the form.
-     *
-     * @return void
      */
     public function mount(): void
     {
@@ -76,6 +72,9 @@ class Transaction extends Component
             ->toArray();
     }
 
+    /**
+     * Load a transaction into the form and open the edit modal.
+     */
     #[On('edit-transaction')]
     public function openForEdit(int $transactionId): void
     {
@@ -116,11 +115,6 @@ class Transaction extends Component
 
     /**
      * Validate and persist the transaction.
-     *
-     * @return void
-     *
-     * @throws ValidationException
-     * @throws Throwable
      */
     public function save(): void
     {
@@ -183,8 +177,6 @@ class Transaction extends Component
 
     /**
      * Reset the form state when the modal is closed.
-     *
-     * @return void
      */
     public function resetForm(): void
     {

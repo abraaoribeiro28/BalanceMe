@@ -18,6 +18,9 @@ class ForgotPassword extends Component
     use HasToast;
     public string $email;
 
+    /**
+     * Send a password reset link to the provided email.
+     */
     public function sendPasswordResetLink(): void
     {
         $this->validate([
@@ -41,6 +44,9 @@ class ForgotPassword extends Component
         session()->flash('status', __($status));
     }
 
+    /**
+     * Render the forgot-password page.
+     */
     public function render()
     {
         /** @var View $view */

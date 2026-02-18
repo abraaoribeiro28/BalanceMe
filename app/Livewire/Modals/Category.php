@@ -21,8 +21,6 @@ class Category extends Component
 
     /**
      * Validation rules for category form.
-     *
-     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -43,6 +41,9 @@ class Category extends Component
         ];
     }
 
+    /**
+     * Load a category into the form and open the edit modal.
+     */
     #[On('edit-category')]
     public function openForEdit(int $categoryId): void
     {
@@ -80,11 +81,6 @@ class Category extends Component
 
     /**
      * Validate and persist the category.
-     *
-     * @return void
-     *
-     * @throws ValidationException
-     * @throws Throwable
      */
     public function save(): void
     {

@@ -20,8 +20,6 @@ class Card extends Component
 
     /**
      * Validation rules for card form.
-     *
-     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -41,6 +39,9 @@ class Card extends Component
         ];
     }
 
+    /**
+     * Load a card into the form and open the edit modal.
+     */
     #[On('edit-card')]
     public function openForEdit(int $cardId): void
     {
@@ -77,11 +78,6 @@ class Card extends Component
 
     /**
      * Validate and persist the card.
-     *
-     * @return void
-     *
-     * @throws ValidationException
-     * @throws Throwable
      */
     public function save(): void
     {
@@ -142,8 +138,6 @@ class Card extends Component
 
     /**
      * Reset the form state when the modal is closed.
-     *
-     * @return void
      */
     public function resetForm(): void
     {

@@ -21,6 +21,9 @@ final class RegisterForm extends Form
 
     public string $password_confirmation = '';
 
+    /**
+     * Validate input and create a new authenticated user.
+     */
     public function register()
     {
         $validated = $this->validate([

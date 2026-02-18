@@ -14,6 +14,9 @@ final class ConfirmPassword extends Component
 {
     public string $password = '';
 
+    /**
+     * Validate and confirm the current user's password.
+     */
     public function confirmPassword(): void
     {
         $this->validate([
@@ -34,6 +37,9 @@ final class ConfirmPassword extends Component
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
+    /**
+     * Render the confirm-password page.
+     */
     public function render()
     {
         /** @var View $view */
